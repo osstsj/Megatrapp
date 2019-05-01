@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Megatrapp.model;
+using System.Windows.Forms;
+using System.Collections;
 
 namespace Megatrapp.controller {
     class ZKHelper {
@@ -11,12 +13,13 @@ namespace Megatrapp.controller {
         public zkemkeeper.CZKEMClass serviceController = new zkemkeeper.CZKEMClass();
         public List<Employee> employeeList = new List<Employee>();
         private bool deviceIsConnected = false; //the boolean value identifies whether the device is connected
-        private int machineNumber;
+        private int machineNumber = 1;
+        private string password = "";
         private int port = 4370;
-        private int enrollNumber;
+        private string enrollNumber;
         private string name;
         private string pass;
-        private string privilege;
+        private int privilege;
         private bool machineEnable;
 
         public int ConnectTCP(string ip, string port) {
@@ -54,6 +57,43 @@ namespace Megatrapp.controller {
             } catch (Exception) {
                 throw;
             }
+        }
+
+        public List<Employee> GetAllUsersInfo() {
+            serviceController.ReadAllUserID(machineNumber);
+            ArrayList users = new ArrayList();
+            List<Employee> employees = new List<Employee>();
+            while (serviceController.SSR_GetAllUserInfo(machineNumber, out enrollNumber, out name, out password, out privilege, out machineEnable)) {
+                employees.Add(new Employee(machineNumber, name, password, privilege));
+            }
+            return employees;
+        }
+
+        public ArrayList DownloadAttendanceData() {
+            string enrollNumber = "";
+            int verifyMode = 0;
+            int inOutMode = 0;
+            int year = 0;
+            int month = 0;
+            int day = 0;
+            int hour = 0;
+            int minute = 0;
+            int second = 0;
+            int workCode = 0;
+            ArrayList records = new ArrayList();
+            // should disable the device first
+            serviceController.ReadAllGLogData(machineNumber);
+            while (serviceController.SSR_GetGeneralLogData(machineNumber, out enrollNumber, out verifyMode,
+                    out inOutMode, out year, out month, out day, out hour, out minute, out second, ref workCode)) {
+                records.Add(enrollNumber);
+                records.Add(verifyMode);
+                records.Add(inOutMode);
+                records.Add(year);
+                records.Add(workCode);
+
+            }
+            //serviceController.GetGeneralLogData(machineNumber,)
+            return records;
         }
 
         public void Disconnect() {

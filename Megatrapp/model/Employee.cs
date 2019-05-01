@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 
 namespace Megatrapp.model {
     class Employee {
-        public string pin { get; set; }
+
+        public Employee(int machineNumber, string name, string password, int privilege) {
+            this.machineNumber = machineNumber;
+            this.name = name;
+            this.password = password;
+            this.privilege = privilege;
+        }
+
+        public int machineNumber { get; set; }
         public string name { get; set; }
         public string password { get; set; }
         public int privilege { get; set; }
-        public string cardNumber { get; set; }
     }
 }

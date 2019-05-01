@@ -1,5 +1,7 @@
 ﻿using Megatrapp.controller;
+using Megatrapp.model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,15 +28,25 @@ namespace Megatrapp
 
         }
 
-        private void Connect() {
-
-        }
-
         private void buttonRun_Click(object sender, EventArgs e) {
-            if (zKHelper.ConnectTCP("192.168.0.208", "4370") == 1) {
-                MessageBox.Show("Conectado!");
+            try {
+                if (zKHelper.ConnectTCP("192.168.0.208", "4370") == 1) {
+                    labelStatus.Text = "Conectado!";
+                    //ArrayList records = zKHelper.DownloadAttendanceData();
+                    List<Employee> employees = zKHelper.GetAllUsersInfo();
+                    foreach (var employee in employees) {
+                        listBoxUsers.Items.Add("Machine Number " + employee.machineNumber);
+                        listBoxUsers.Items.Add("Name " + employee.name);
+                        listBoxUsers.Items.Add("Password " + employee.password);
+                        listBoxUsers.Items.Add("Employee " + employee.privilege);
+                        //listBoxClocks.Items.Add(record);
+                        //listBoxClocks.Items.Add("#########");
+                    }
+                }
+            } catch (Exception) {
+
+                throw;
             }
-            
         }
     }
 }

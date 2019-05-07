@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Megatrapp.model;
+using System.Windows.Forms;
+using System.Collections;
 
 namespace Megatrapp.controller {
     class ZKHelper {
@@ -11,15 +13,24 @@ namespace Megatrapp.controller {
         public zkemkeeper.CZKEMClass serviceController = new zkemkeeper.CZKEMClass();
         public List<Employee> employeeList = new List<Employee>();
         private bool deviceIsConnected = false; //the boolean value identifies whether the device is connected
-        private int machineNumber;
+        private int machineNumber = 1;
+        private string password = "";
         private int port = 4370;
-        private int enrollNumber;
+        private string enrollNumber;
         private string name;
-        private string pass;
-        private string privilege;
+        private int privilege;
         private bool machineEnable;
+        public Action<int> OnVerify;
+        public delegate DataGridView GetRealEventDataGridViewHandler();
+        private GetRealEventDataGridViewHandler getRealEventDataGridViewHandler;
+        private DataGridView gRealEventDataGridView;
 
-        public int ConnectTCP(string ip, string port) {
+
+        public ZKHelper() {
+            OnVerify = serviceController_OnVerify;
+        }
+
+        public int ConnectTCP(string ip, string port, DataGridView gRealEventDataGridView) {
             try {
                 int dwErrorCore = 0;
 
@@ -44,8 +55,8 @@ namespace Megatrapp.controller {
 
                 if (serviceController.Connect_Net(ip, Convert.ToInt32(port))) {
                     SetConnectionState(true);
-                    // To be implemented
-                    //RegisterRealtime();
+                    RegisterRealtime();
+                    this.gRealEventDataGridView = gRealEventDataGridView;
                     return 1;
                 } else {
                     serviceController.GetLastError(ref dwErrorCore);
@@ -53,6 +64,68 @@ namespace Megatrapp.controller {
                 }
             } catch (Exception) {
                 throw;
+            }
+        }
+
+        public void SetRealTimeDataGridView(GetRealEventDataGridViewHandler dgcHandler) {
+            getRealEventDataGridViewHandler = dgcHandler;
+            gRealEventDataGridView = getRealEventDataGridViewHandler();
+            
+        }
+
+        public List<Employee> GetAllUsersInfo() {
+            serviceController.ReadAllUserID(machineNumber);
+            ArrayList users = new ArrayList();
+            List<Employee> employees = new List<Employee>();
+            while (serviceController.SSR_GetAllUserInfo(machineNumber, out enrollNumber, out name, out password, out privilege, out machineEnable)) {
+                employees.Add(new Employee(enrollNumber, machineNumber, name, password, privilege));
+            }
+            return employees;
+        }
+
+        public List<AttendanceRecord> DownloadAttendanceData() {
+            string enrollNumber = "";
+            int verifyMode = 0;
+            int inOutMode = 0;
+            int year = 0;
+            int month = 0;
+            int day = 0;
+            int hour = 0;
+            int minute = 0;
+            int second = 0;
+            int workCode = 0;
+            List<AttendanceRecord> records = new List<AttendanceRecord>();
+            // should disable the device first
+            serviceController.ReadAllGLogData(machineNumber);
+            while (serviceController.SSR_GetGeneralLogData(machineNumber, out enrollNumber, out verifyMode,
+                    out inOutMode, out year, out month, out day, out hour, out minute, out second, ref workCode)) {
+                records.Add(new AttendanceRecord(machineNumber, enrollNumber, verifyMode, inOutMode, year, month, day, hour, minute, second, workCode));
+            }
+            return records;
+        }
+
+        public int RegisterRealtime() {
+            if (!GetConnectionState()) {
+                MessageBox.Show("No hay conexion con el dispositivo");
+                return -1;
+            }
+            if (serviceController.RegEvent(GetMachineNumber(), 65535)) {
+                this.serviceController.OnVerify += new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(OnVerify);
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        public void UnregisterRealTime() {
+            this.serviceController.OnVerify -= new zkemkeeper._IZKEMEvents_OnVerifyEventHandler(OnVerify);
+        }
+
+        public virtual void serviceController_OnVerify(int userID) {
+            MessageBox.Show("ENTRE!");
+            if (userID != -1) {
+                gRealEventDataGridView.Rows.Add();
+                MessageBox.Show("Verified user " + userID);
             }
         }
 

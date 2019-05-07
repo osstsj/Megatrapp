@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 namespace Megatrapp.model {
     class Employee {
 
-        public Employee(int machineNumber, string name, string password, int privilege) {
-            this.machineNumber = machineNumber;
-            this.name = name;
-            this.password = password;
-            this.privilege = privilege;
-        }
+        public string EnrollNumber { get; set; }
+        public int MachineNumber { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public int Privilege { get; set; }
 
-        public int machineNumber { get; set; }
-        public string name { get; set; }
-        public string password { get; set; }
-        public int privilege { get; set; }
+        public Employee(string enrollNumber, int machineNumber, string name, string password, int privilege) {
+            EnrollNumber = enrollNumber;
+            MachineNumber = machineNumber;
+            Name = name;
+            Password = password;
+            Privilege = privilege;
+        }
     }
 }

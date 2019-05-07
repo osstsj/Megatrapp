@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuMainWindow = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,15 +39,32 @@
             this.labelStatus = new System.Windows.Forms.Label();
             this.buttonRun = new System.Windows.Forms.Button();
             this.tabUsers = new System.Windows.Forms.TabPage();
-            this.listBoxUsers = new System.Windows.Forms.ListBox();
+            this.dataGridViewUsers = new System.Windows.Forms.DataGridView();
             this.tabClocks = new System.Windows.Forms.TabPage();
             this.listBoxClocks = new System.Windows.Forms.ListBox();
+            this.tabAttendanceRecords = new System.Windows.Forms.TabPage();
+            this.enrollNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.privilegeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.passwordColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewAttendanceRecords = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.employeeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.inOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.workCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timerApp = new System.Windows.Forms.Timer(this.components);
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabUsers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUsers)).BeginInit();
             this.tabClocks.SuspendLayout();
+            this.tabAttendanceRecords.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendanceRecords)).BeginInit();
             this.SuspendLayout();
             // 
             // menuMainWindow
@@ -71,13 +89,13 @@
             // nuevoToolStripMenuItem
             // 
             this.nuevoToolStripMenuItem.Name = "nuevoToolStripMenuItem";
-            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.nuevoToolStripMenuItem.Text = "Nuevo";
             // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.salirToolStripMenuItem.Text = "Salir";
             // 
             // tabControlMainWindow
@@ -85,6 +103,7 @@
             this.tabControlMainWindow.Controls.Add(this.tabStatus);
             this.tabControlMainWindow.Controls.Add(this.tabUsers);
             this.tabControlMainWindow.Controls.Add(this.tabClocks);
+            this.tabControlMainWindow.Controls.Add(this.tabAttendanceRecords);
             this.tabControlMainWindow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMainWindow.Location = new System.Drawing.Point(0, 27);
             this.tabControlMainWindow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -147,7 +166,7 @@
             // 
             // tabUsers
             // 
-            this.tabUsers.Controls.Add(this.listBoxUsers);
+            this.tabUsers.Controls.Add(this.dataGridViewUsers);
             this.tabUsers.Location = new System.Drawing.Point(4, 30);
             this.tabUsers.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabUsers.Name = "tabUsers";
@@ -157,15 +176,24 @@
             this.tabUsers.Text = "Usuarios";
             this.tabUsers.UseVisualStyleBackColor = true;
             // 
-            // listBoxUsers
+            // dataGridViewUsers
             // 
-            this.listBoxUsers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxUsers.FormattingEnabled = true;
-            this.listBoxUsers.ItemHeight = 21;
-            this.listBoxUsers.Location = new System.Drawing.Point(4, 5);
-            this.listBoxUsers.Name = "listBoxUsers";
-            this.listBoxUsers.Size = new System.Drawing.Size(794, 319);
-            this.listBoxUsers.TabIndex = 0;
+            this.dataGridViewUsers.AllowUserToAddRows = false;
+            this.dataGridViewUsers.AllowUserToDeleteRows = false;
+            this.dataGridViewUsers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewUsers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.enrollNumber,
+            this.nameColumn,
+            this.privilegeColumn,
+            this.passwordColumn,
+            this.machineNumberColumn});
+            this.dataGridViewUsers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewUsers.Location = new System.Drawing.Point(4, 5);
+            this.dataGridViewUsers.Name = "dataGridViewUsers";
+            this.dataGridViewUsers.ReadOnly = true;
+            this.dataGridViewUsers.Size = new System.Drawing.Size(794, 319);
+            this.dataGridViewUsers.TabIndex = 0;
             // 
             // tabClocks
             // 
@@ -189,6 +217,108 @@
             this.listBoxClocks.Size = new System.Drawing.Size(794, 319);
             this.listBoxClocks.TabIndex = 0;
             // 
+            // tabAttendanceRecords
+            // 
+            this.tabAttendanceRecords.Controls.Add(this.dataGridViewAttendanceRecords);
+            this.tabAttendanceRecords.Location = new System.Drawing.Point(4, 30);
+            this.tabAttendanceRecords.Name = "tabAttendanceRecords";
+            this.tabAttendanceRecords.Padding = new System.Windows.Forms.Padding(3);
+            this.tabAttendanceRecords.Size = new System.Drawing.Size(802, 329);
+            this.tabAttendanceRecords.TabIndex = 3;
+            this.tabAttendanceRecords.Text = "Registros";
+            this.tabAttendanceRecords.UseVisualStyleBackColor = true;
+            // 
+            // enrollNumber
+            // 
+            this.enrollNumber.HeaderText = "ID";
+            this.enrollNumber.Name = "enrollNumber";
+            this.enrollNumber.ReadOnly = true;
+            // 
+            // nameColumn
+            // 
+            this.nameColumn.HeaderText = "Nombre";
+            this.nameColumn.Name = "nameColumn";
+            this.nameColumn.ReadOnly = true;
+            // 
+            // privilegeColumn
+            // 
+            this.privilegeColumn.HeaderText = "Privilegio";
+            this.privilegeColumn.Name = "privilegeColumn";
+            this.privilegeColumn.ReadOnly = true;
+            // 
+            // passwordColumn
+            // 
+            this.passwordColumn.HeaderText = "Password";
+            this.passwordColumn.Name = "passwordColumn";
+            this.passwordColumn.ReadOnly = true;
+            // 
+            // machineNumberColumn
+            // 
+            this.machineNumberColumn.HeaderText = "Numero de Maquina";
+            this.machineNumberColumn.Name = "machineNumberColumn";
+            this.machineNumberColumn.ReadOnly = true;
+            // 
+            // dataGridViewAttendanceRecords
+            // 
+            this.dataGridViewAttendanceRecords.AllowUserToAddRows = false;
+            this.dataGridViewAttendanceRecords.AllowUserToDeleteRows = false;
+            this.dataGridViewAttendanceRecords.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewAttendanceRecords.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewAttendanceRecords.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
+            this.employeeName,
+            this.time,
+            this.date,
+            this.inOut,
+            this.workCode});
+            this.dataGridViewAttendanceRecords.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewAttendanceRecords.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewAttendanceRecords.Name = "dataGridViewAttendanceRecords";
+            this.dataGridViewAttendanceRecords.ReadOnly = true;
+            this.dataGridViewAttendanceRecords.Size = new System.Drawing.Size(796, 323);
+            this.dataGridViewAttendanceRecords.TabIndex = 0;
+            // 
+            // ID
+            // 
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            // 
+            // employeeName
+            // 
+            this.employeeName.HeaderText = "Nombre";
+            this.employeeName.Name = "employeeName";
+            this.employeeName.ReadOnly = true;
+            // 
+            // time
+            // 
+            this.time.HeaderText = "Hora";
+            this.time.Name = "time";
+            this.time.ReadOnly = true;
+            // 
+            // date
+            // 
+            this.date.HeaderText = "Fecha";
+            this.date.Name = "date";
+            this.date.ReadOnly = true;
+            // 
+            // inOut
+            // 
+            this.inOut.HeaderText = "Entrada/Salida";
+            this.inOut.Name = "inOut";
+            this.inOut.ReadOnly = true;
+            // 
+            // workCode
+            // 
+            this.workCode.HeaderText = "WorkCode";
+            this.workCode.Name = "workCode";
+            this.workCode.ReadOnly = true;
+            // 
+            // timerApp
+            // 
+            this.timerApp.Interval = 1000;
+            this.timerApp.Tick += new System.EventHandler(this.timerApp_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
@@ -210,7 +340,10 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tabUsers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewUsers)).EndInit();
             this.tabClocks.ResumeLayout(false);
+            this.tabAttendanceRecords.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendanceRecords)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -229,8 +362,22 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.Button buttonRun;
-        private System.Windows.Forms.ListBox listBoxUsers;
         private System.Windows.Forms.ListBox listBoxClocks;
+        private System.Windows.Forms.DataGridView dataGridViewUsers;
+        private System.Windows.Forms.TabPage tabAttendanceRecords;
+        private System.Windows.Forms.DataGridViewTextBoxColumn enrollNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn privilegeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn passwordColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn machineNumberColumn;
+        private System.Windows.Forms.DataGridView dataGridViewAttendanceRecords;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn employeeName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn time;
+        private System.Windows.Forms.DataGridViewTextBoxColumn date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn inOut;
+        private System.Windows.Forms.DataGridViewTextBoxColumn workCode;
+        private System.Windows.Forms.Timer timerApp;
     }
 }
 

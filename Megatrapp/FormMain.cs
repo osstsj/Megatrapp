@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Timers;
 
 namespace Megatrapp
 {
@@ -17,6 +18,7 @@ namespace Megatrapp
     {
 
         ZKHelper zKHelper = new ZKHelper();
+        private static System.Timers.Timer timer;
 
         public frmMain()
         {
@@ -30,23 +32,38 @@ namespace Megatrapp
 
         private void buttonRun_Click(object sender, EventArgs e) {
             try {
-                if (zKHelper.ConnectTCP("192.168.0.208", "4370") == 1) {
-                    labelStatus.Text = "Conectado!";
-                    //ArrayList records = zKHelper.DownloadAttendanceData();
-                    List<Employee> employees = zKHelper.GetAllUsersInfo();
-                    foreach (var employee in employees) {
-                        listBoxUsers.Items.Add("Machine Number " + employee.machineNumber);
-                        listBoxUsers.Items.Add("Name " + employee.name);
-                        listBoxUsers.Items.Add("Password " + employee.password);
-                        listBoxUsers.Items.Add("Employee " + employee.privilege);
-                        //listBoxClocks.Items.Add(record);
-                        //listBoxClocks.Items.Add("#########");
-                    }
+                if (buttonRun.Text == "&Iniciar") {
+                    buttonRun.Text = "&Detener";
+                    timerApp.Enabled = true;
+                } else {
+                    buttonRun.Text = "&Iniciar";
+                    timerApp.Enabled = false;
                 }
+                
+                /*if (zKHelper.ConnectTCP("192.168.0.208", "4370", dataGridViewAttendanceRecords) == 1) {
+                    labelStatus.Text = "Conectado!";
+                    //Application.Run();
+                    List<Employee> employees = zKHelper.GetAllUsersInfo();
+                    List<AttendanceRecord> records = zKHelper.DownloadAttendanceData();
+                    foreach (Employee employee in employees) {
+                        dataGridViewUsers.Rows.Add(employee.EnrollNumber, employee.Name, employee.Privilege, employee.Password, employee.MachineNumber);
+                    }
+                    foreach (AttendanceRecord record in records) {
+                        Employee employee = employees.Find(employeeX => employeeX.EnrollNumber == record.EnrollNumber);
+                        string hour = record.Hour + ":" + record.Minute;
+                        string date = record.Day + "/" + record.Month + "/" + record.Year;
+                        dataGridViewAttendanceRecords.Rows.Add(employee.EnrollNumber, employee.Name, hour, date, record.InOutMode, record.WorkCode);
+                    }
+
+                }*/
             } catch (Exception) {
 
                 throw;
             }
+        }
+
+        private void timerApp_Tick(object sender, EventArgs e) {
+            labelStatus.Text = DateTime.Now.ToShortTimeString();
         }
     }
 }

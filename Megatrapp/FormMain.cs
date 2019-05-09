@@ -67,7 +67,7 @@ namespace Megatrapp
         }
 
         private void DownloadRecords() {
-            if (zKHelper.ConnectTCP("192.168.0.208", "4370", dataGridViewAttendanceRecords) == 1) {
+            if (zKHelper.ConnectTCP("192.168.0.208", dataGridViewAttendanceRecords) == 1) {
                 ClearDataGridViewData();
                 // The if is in case the GUI needs to be updated from another thread
                 if (labelStatus.InvokeRequired) {

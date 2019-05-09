@@ -14,7 +14,7 @@ namespace Megatrapp.controller {
         public List<Employee> employeeList = new List<Employee>();
         private bool deviceIsConnected = false; //the boolean value identifies whether the device is connected
         private int machineNumber = 1;
-        private const string PASSWORD = "";
+        private string password = "";
         private const string PORT = "4370";
         private string enrollNumber;
         private string name;
@@ -73,12 +73,17 @@ namespace Megatrapp.controller {
             
         }
 
+        public bool EraseAttendanceData() {
+
+            return true;
+        }
+
         public List<Employee> GetAllUsersInfo() {
             serviceController.ReadAllUserID(machineNumber);
             ArrayList users = new ArrayList();
             List<Employee> employees = new List<Employee>();
             while (serviceController.SSR_GetAllUserInfo(machineNumber, out enrollNumber, out name, out password, out privilege, out machineEnable)) {
-                employees.Add(new Employee(enrollNumber, machineNumber, name, PASSWORD, privilege));
+                employees.Add(new Employee(enrollNumber, machineNumber, name, password, privilege));
             }
             return employees;
         }

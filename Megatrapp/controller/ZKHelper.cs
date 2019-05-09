@@ -25,7 +25,6 @@ namespace Megatrapp.controller {
         private GetRealEventDataGridViewHandler getRealEventDataGridViewHandler;
         private DataGridView gRealEventDataGridView;
 
-
         public ZKHelper() {
             OnVerify = serviceController_OnVerify;
         }
@@ -67,6 +66,10 @@ namespace Megatrapp.controller {
             }
         }
 
+        public void SetDeviceState(bool flag) {
+            serviceController.EnableDevice(machineNumber, flag);
+        }
+
         public void SetRealTimeDataGridView(GetRealEventDataGridViewHandler dgcHandler) {
             getRealEventDataGridViewHandler = dgcHandler;
             gRealEventDataGridView = getRealEventDataGridViewHandler();
@@ -74,8 +77,7 @@ namespace Megatrapp.controller {
         }
 
         public bool EraseAttendanceData() {
-
-            return true;
+            return serviceController.ClearGLog(machineNumber);
         }
 
         public List<Employee> GetAllUsersInfo() {

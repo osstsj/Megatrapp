@@ -18,7 +18,7 @@ namespace Megatrapp
     public partial class frmMain : Form
     {
 
-        ZKHelper zKHelper = new ZKHelper();
+        
         private System.Threading.Timer timer;
 
         public frmMain() {
@@ -26,17 +26,25 @@ namespace Megatrapp
         }
 
         private void SetUpTimer(TimeSpan alertTime) {
-            DateTime current = DateTime.Now;
-            TimeSpan timeToGo = alertTime - current.TimeOfDay;
-            if (timeToGo < TimeSpan.Zero) {
-                return;//time already passed
+            try {
+                DateTime current = DateTime.Now;
+                TimeSpan timeToGo = alertTime - current.TimeOfDay;
+                if (timeToGo < TimeSpan.Zero) {
+                    return;//time already passed
+                }
+                this.timer = new System.Threading.Timer(x => {
+                    this.SomeMethodRunsAt0000();
+                }, null, timeToGo, Timeout.InfiniteTimeSpan);
+            } catch (Exception) {
+
+                throw;
             }
-            this.timer = new System.Threading.Timer(x => {
-                this.SomeMethodRunsAt0000();
-            }, null, timeToGo, Timeout.InfiniteTimeSpan);
+            
         }
 
         private void SomeMethodRunsAt0000() {
+            // Send to DB
+            EraseRecords();
             DownloadRecords();
         }
 
@@ -55,7 +63,6 @@ namespace Megatrapp
                     DownloadRecords();
                     labelStatus.Text = "Registros descargados";
                 } else {
-                    zKHelper.Disconnect();
                     buttonRun.Text = "&Iniciar";
                     labelStatus.Text = "Detenido";
                     timerApp.Enabled = false;
@@ -67,20 +74,45 @@ namespace Megatrapp
         }
 
         private void DownloadRecords() {
-            if (zKHelper.ConnectTCP("192.168.0.208", dataGridViewAttendanceRecords) == 1) {
-                ClearDataGridViewData();
-                // The if is in case the GUI needs to be updated from another thread
-                if (labelStatus.InvokeRequired) {
-                    labelStatus.Invoke(new MethodInvoker(() => labelStatus.Text = "Registros descargados"));
-                } else {
-                    labelStatus.Text = "Registros descargados";
+            try {
+                ZKHelper zKHelper = new ZKHelper();
+                if (zKHelper.ConnectTCP("192.168.0.208", dataGridViewAttendanceRecords) == 1) {
+                    ClearDataGridViewData();
+                    // The if is in case the GUI needs to be updated from another thread
+                    if (labelStatus.InvokeRequired) {
+                        labelStatus.Invoke(new MethodInvoker(() => labelStatus.Text = "Registros descargados"));
+                    } else {
+                        labelStatus.Text = "Registros descargados";
+                    }
+                    zKHelper.SetDeviceState(false);
+                    List<Employee> employees = zKHelper.GetAllUsersInfo();
+                    List<AttendanceRecord> records = zKHelper.DownloadAttendanceData();
+                    FillDataGridEmployees(employees);
+                    FillDataGridAttendanceRecords(records, employees);
+                    zKHelper.SetDeviceState(true);
+                    zKHelper.Disconnect();
                 }
-                List<Employee> employees = zKHelper.GetAllUsersInfo();
-                List<AttendanceRecord> records = zKHelper.DownloadAttendanceData();
-                FillDataGridEmployees(employees);
-                FillDataGridAttendanceRecords(records, employees);
-                zKHelper.Disconnect();
+            } catch (Exception) {
+
+                throw;
             }
+            
+        }
+
+        private void EraseRecords() {
+            try {
+                ZKHelper zKHelper = new ZKHelper();
+                if (zKHelper.ConnectTCP("192.168.0.208", dataGridViewAttendanceRecords) == 1) {
+                    zKHelper.SetDeviceState(false);
+                    zKHelper.EraseAttendanceData();
+                    zKHelper.SetDeviceState(true);
+                    zKHelper.Disconnect();
+                }
+            } catch (Exception) {
+
+                throw;
+            }
+            
         }
 
         private void ClearDataGridViewData() {
@@ -119,6 +151,15 @@ namespace Megatrapp
 
         private void timerApp_Tick(object sender, EventArgs e) {
             DownloadRecords();
+        }
+
+        private void buttonEraseAttendanceRecords_Click(object sender, EventArgs e) {
+            try {
+                EraseRecords();
+            } catch (Exception) {
+
+                throw;
+            }
         }
     }
 }

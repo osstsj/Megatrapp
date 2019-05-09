@@ -40,14 +40,14 @@
             this.buttonRun = new System.Windows.Forms.Button();
             this.tabUsers = new System.Windows.Forms.TabPage();
             this.dataGridViewUsers = new System.Windows.Forms.DataGridView();
-            this.tabClocks = new System.Windows.Forms.TabPage();
-            this.listBoxClocks = new System.Windows.Forms.ListBox();
-            this.tabAttendanceRecords = new System.Windows.Forms.TabPage();
             this.enrollNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.privilegeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.passwordColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabClocks = new System.Windows.Forms.TabPage();
+            this.listBoxClocks = new System.Windows.Forms.ListBox();
+            this.tabAttendanceRecords = new System.Windows.Forms.TabPage();
             this.dataGridViewAttendanceRecords = new System.Windows.Forms.DataGridView();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.employeeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,6 +56,7 @@
             this.inOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.workCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerApp = new System.Windows.Forms.Timer(this.components);
+            this.buttonEraseAttendanceRecords = new System.Windows.Forms.Button();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -130,6 +131,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.Controls.Add(this.buttonEraseAttendanceRecords, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.labelStatus, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonRun, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -195,6 +197,36 @@
             this.dataGridViewUsers.Size = new System.Drawing.Size(794, 319);
             this.dataGridViewUsers.TabIndex = 0;
             // 
+            // enrollNumber
+            // 
+            this.enrollNumber.HeaderText = "ID";
+            this.enrollNumber.Name = "enrollNumber";
+            this.enrollNumber.ReadOnly = true;
+            // 
+            // nameColumn
+            // 
+            this.nameColumn.HeaderText = "Nombre";
+            this.nameColumn.Name = "nameColumn";
+            this.nameColumn.ReadOnly = true;
+            // 
+            // privilegeColumn
+            // 
+            this.privilegeColumn.HeaderText = "Privilegio";
+            this.privilegeColumn.Name = "privilegeColumn";
+            this.privilegeColumn.ReadOnly = true;
+            // 
+            // passwordColumn
+            // 
+            this.passwordColumn.HeaderText = "Password";
+            this.passwordColumn.Name = "passwordColumn";
+            this.passwordColumn.ReadOnly = true;
+            // 
+            // machineNumberColumn
+            // 
+            this.machineNumberColumn.HeaderText = "Numero de Maquina";
+            this.machineNumberColumn.Name = "machineNumberColumn";
+            this.machineNumberColumn.ReadOnly = true;
+            // 
             // tabClocks
             // 
             this.tabClocks.Controls.Add(this.listBoxClocks);
@@ -227,36 +259,6 @@
             this.tabAttendanceRecords.TabIndex = 3;
             this.tabAttendanceRecords.Text = "Registros";
             this.tabAttendanceRecords.UseVisualStyleBackColor = true;
-            // 
-            // enrollNumber
-            // 
-            this.enrollNumber.HeaderText = "ID";
-            this.enrollNumber.Name = "enrollNumber";
-            this.enrollNumber.ReadOnly = true;
-            // 
-            // nameColumn
-            // 
-            this.nameColumn.HeaderText = "Nombre";
-            this.nameColumn.Name = "nameColumn";
-            this.nameColumn.ReadOnly = true;
-            // 
-            // privilegeColumn
-            // 
-            this.privilegeColumn.HeaderText = "Privilegio";
-            this.privilegeColumn.Name = "privilegeColumn";
-            this.privilegeColumn.ReadOnly = true;
-            // 
-            // passwordColumn
-            // 
-            this.passwordColumn.HeaderText = "Password";
-            this.passwordColumn.Name = "passwordColumn";
-            this.passwordColumn.ReadOnly = true;
-            // 
-            // machineNumberColumn
-            // 
-            this.machineNumberColumn.HeaderText = "Numero de Maquina";
-            this.machineNumberColumn.Name = "machineNumberColumn";
-            this.machineNumberColumn.ReadOnly = true;
             // 
             // dataGridViewAttendanceRecords
             // 
@@ -319,6 +321,19 @@
             this.timerApp.Interval = 1000;
             this.timerApp.Tick += new System.EventHandler(this.timerApp_Tick);
             // 
+            // buttonEraseAttendanceRecords
+            // 
+            this.buttonEraseAttendanceRecords.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonEraseAttendanceRecords.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonEraseAttendanceRecords.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.buttonEraseAttendanceRecords.Location = new System.Drawing.Point(83, 222);
+            this.buttonEraseAttendanceRecords.Name = "buttonEraseAttendanceRecords";
+            this.buttonEraseAttendanceRecords.Size = new System.Drawing.Size(98, 33);
+            this.buttonEraseAttendanceRecords.TabIndex = 2;
+            this.buttonEraseAttendanceRecords.Text = "&Borrar";
+            this.buttonEraseAttendanceRecords.UseVisualStyleBackColor = true;
+            this.buttonEraseAttendanceRecords.Click += new System.EventHandler(this.buttonEraseAttendanceRecords_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
@@ -378,6 +393,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn inOut;
         private System.Windows.Forms.DataGridViewTextBoxColumn workCode;
         private System.Windows.Forms.Timer timerApp;
+        private System.Windows.Forms.Button buttonEraseAttendanceRecords;
     }
 }
 

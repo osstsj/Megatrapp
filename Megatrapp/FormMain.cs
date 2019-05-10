@@ -14,8 +14,7 @@ using System.Timers;
 using System.Threading;
 
 namespace Megatrapp
-{
-    public partial class frmMain : Form
+{    public partial class frmMain : Form
     {
 
         

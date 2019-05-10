@@ -36,6 +36,7 @@
             this.tabControlMainWindow = new System.Windows.Forms.TabControl();
             this.tabStatus = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.buttonEraseAttendanceRecords = new System.Windows.Forms.Button();
             this.labelStatus = new System.Windows.Forms.Label();
             this.buttonRun = new System.Windows.Forms.Button();
             this.tabUsers = new System.Windows.Forms.TabPage();
@@ -46,7 +47,6 @@
             this.passwordColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClocks = new System.Windows.Forms.TabPage();
-            this.listBoxClocks = new System.Windows.Forms.ListBox();
             this.tabAttendanceRecords = new System.Windows.Forms.TabPage();
             this.dataGridViewAttendanceRecords = new System.Windows.Forms.DataGridView();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,7 +56,15 @@
             this.inOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.workCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerApp = new System.Windows.Forms.Timer(this.components);
-            this.buttonEraseAttendanceRecords = new System.Windows.Forms.Button();
+            this.splitContainerClocks = new System.Windows.Forms.SplitContainer();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.labelClockIP = new System.Windows.Forms.Label();
+            this.buttonAdd = new System.Windows.Forms.Button();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.clocksLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clocksIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.deleteClock = new System.Windows.Forms.DataGridViewButtonColumn();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -66,6 +74,12 @@
             this.tabClocks.SuspendLayout();
             this.tabAttendanceRecords.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendanceRecords)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerClocks)).BeginInit();
+            this.splitContainerClocks.Panel1.SuspendLayout();
+            this.splitContainerClocks.Panel2.SuspendLayout();
+            this.splitContainerClocks.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuMainWindow
@@ -142,6 +156,19 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(794, 319);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // buttonEraseAttendanceRecords
+            // 
+            this.buttonEraseAttendanceRecords.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonEraseAttendanceRecords.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonEraseAttendanceRecords.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.buttonEraseAttendanceRecords.Location = new System.Drawing.Point(83, 222);
+            this.buttonEraseAttendanceRecords.Name = "buttonEraseAttendanceRecords";
+            this.buttonEraseAttendanceRecords.Size = new System.Drawing.Size(98, 33);
+            this.buttonEraseAttendanceRecords.TabIndex = 2;
+            this.buttonEraseAttendanceRecords.Text = "&Borrar";
+            this.buttonEraseAttendanceRecords.UseVisualStyleBackColor = true;
+            this.buttonEraseAttendanceRecords.Click += new System.EventHandler(this.buttonEraseAttendanceRecords_Click);
             // 
             // labelStatus
             // 
@@ -229,7 +256,7 @@
             // 
             // tabClocks
             // 
-            this.tabClocks.Controls.Add(this.listBoxClocks);
+            this.tabClocks.Controls.Add(this.splitContainerClocks);
             this.tabClocks.Location = new System.Drawing.Point(4, 30);
             this.tabClocks.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabClocks.Name = "tabClocks";
@@ -238,16 +265,6 @@
             this.tabClocks.TabIndex = 2;
             this.tabClocks.Text = "Relojes Checadores";
             this.tabClocks.UseVisualStyleBackColor = true;
-            // 
-            // listBoxClocks
-            // 
-            this.listBoxClocks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxClocks.FormattingEnabled = true;
-            this.listBoxClocks.ItemHeight = 21;
-            this.listBoxClocks.Location = new System.Drawing.Point(4, 5);
-            this.listBoxClocks.Name = "listBoxClocks";
-            this.listBoxClocks.Size = new System.Drawing.Size(794, 319);
-            this.listBoxClocks.TabIndex = 0;
             // 
             // tabAttendanceRecords
             // 
@@ -264,6 +281,8 @@
             // 
             this.dataGridViewAttendanceRecords.AllowUserToAddRows = false;
             this.dataGridViewAttendanceRecords.AllowUserToDeleteRows = false;
+            this.dataGridViewAttendanceRecords.AllowUserToResizeColumns = false;
+            this.dataGridViewAttendanceRecords.AllowUserToResizeRows = false;
             this.dataGridViewAttendanceRecords.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewAttendanceRecords.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewAttendanceRecords.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -321,18 +340,88 @@
             this.timerApp.Interval = 1000;
             this.timerApp.Tick += new System.EventHandler(this.timerApp_Tick);
             // 
-            // buttonEraseAttendanceRecords
+            // splitContainerClocks
             // 
-            this.buttonEraseAttendanceRecords.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonEraseAttendanceRecords.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonEraseAttendanceRecords.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonEraseAttendanceRecords.Location = new System.Drawing.Point(83, 222);
-            this.buttonEraseAttendanceRecords.Name = "buttonEraseAttendanceRecords";
-            this.buttonEraseAttendanceRecords.Size = new System.Drawing.Size(98, 33);
-            this.buttonEraseAttendanceRecords.TabIndex = 2;
-            this.buttonEraseAttendanceRecords.Text = "&Borrar";
-            this.buttonEraseAttendanceRecords.UseVisualStyleBackColor = true;
-            this.buttonEraseAttendanceRecords.Click += new System.EventHandler(this.buttonEraseAttendanceRecords_Click);
+            this.splitContainerClocks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerClocks.Location = new System.Drawing.Point(4, 5);
+            this.splitContainerClocks.Name = "splitContainerClocks";
+            // 
+            // splitContainerClocks.Panel1
+            // 
+            this.splitContainerClocks.Panel1.Controls.Add(this.maskedTextBox1);
+            this.splitContainerClocks.Panel1.Controls.Add(this.buttonAdd);
+            this.splitContainerClocks.Panel1.Controls.Add(this.labelClockIP);
+            // 
+            // splitContainerClocks.Panel2
+            // 
+            this.splitContainerClocks.Panel2.Controls.Add(this.dataGridView1);
+            this.splitContainerClocks.Size = new System.Drawing.Size(794, 319);
+            this.splitContainerClocks.SplitterDistance = 291;
+            this.splitContainerClocks.TabIndex = 0;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.clocksLocation,
+            this.clocksIP,
+            this.deleteClock});
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(499, 319);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // labelClockIP
+            // 
+            this.labelClockIP.AutoSize = true;
+            this.labelClockIP.Location = new System.Drawing.Point(4, 50);
+            this.labelClockIP.Name = "labelClockIP";
+            this.labelClockIP.Size = new System.Drawing.Size(115, 21);
+            this.labelClockIP.TabIndex = 0;
+            this.labelClockIP.Text = "IP del checador";
+            // 
+            // buttonAdd
+            // 
+            this.buttonAdd.Location = new System.Drawing.Point(171, 104);
+            this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.Size = new System.Drawing.Size(76, 33);
+            this.buttonAdd.TabIndex = 2;
+            this.buttonAdd.Text = "&Agregar";
+            this.buttonAdd.UseVisualStyleBackColor = true;
+            // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.Location = new System.Drawing.Point(147, 47);
+            this.maskedTextBox1.Mask = "000.000.000.000";
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(100, 29);
+            this.maskedTextBox1.TabIndex = 3;
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // clocksLocation
+            // 
+            this.clocksLocation.HeaderText = "Ubicacion";
+            this.clocksLocation.Name = "clocksLocation";
+            this.clocksLocation.ReadOnly = true;
+            // 
+            // clocksIP
+            // 
+            this.clocksIP.HeaderText = "IP";
+            this.clocksIP.Name = "clocksIP";
+            this.clocksIP.ReadOnly = true;
+            // 
+            // deleteClock
+            // 
+            this.deleteClock.HeaderText = "Borrar";
+            this.deleteClock.Name = "deleteClock";
+            this.deleteClock.ReadOnly = true;
             // 
             // frmMain
             // 
@@ -359,6 +448,13 @@
             this.tabClocks.ResumeLayout(false);
             this.tabAttendanceRecords.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendanceRecords)).EndInit();
+            this.splitContainerClocks.Panel1.ResumeLayout(false);
+            this.splitContainerClocks.Panel1.PerformLayout();
+            this.splitContainerClocks.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerClocks)).EndInit();
+            this.splitContainerClocks.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,7 +473,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.Button buttonRun;
-        private System.Windows.Forms.ListBox listBoxClocks;
         private System.Windows.Forms.DataGridView dataGridViewUsers;
         private System.Windows.Forms.TabPage tabAttendanceRecords;
         private System.Windows.Forms.DataGridViewTextBoxColumn enrollNumber;
@@ -394,6 +489,15 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn workCode;
         private System.Windows.Forms.Timer timerApp;
         private System.Windows.Forms.Button buttonEraseAttendanceRecords;
+        private System.Windows.Forms.SplitContainer splitContainerClocks;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.Button buttonAdd;
+        private System.Windows.Forms.Label labelClockIP;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clocksLocation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clocksIP;
+        private System.Windows.Forms.DataGridViewButtonColumn deleteClock;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
 

@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Timers;
 using System.Threading;
+using System.Xml;
+using System.IO;
 
 namespace Megatrapp
 {    public partial class frmMain : Form
@@ -66,9 +68,8 @@ namespace Megatrapp
                     labelStatus.Text = "Detenido";
                     timerApp.Enabled = false;
                 }
-            } catch (Exception) {
-
-                throw;
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -91,9 +92,8 @@ namespace Megatrapp
                     zKHelper.SetDeviceState(true);
                     zKHelper.Disconnect();
                 }
-            } catch (Exception) {
-
-                throw;
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
             
         }
@@ -107,9 +107,8 @@ namespace Megatrapp
                     zKHelper.SetDeviceState(true);
                     zKHelper.Disconnect();
                 }
-            } catch (Exception) {
-
-                throw;
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
             
         }
@@ -155,9 +154,49 @@ namespace Megatrapp
         private void buttonEraseAttendanceRecords_Click(object sender, EventArgs e) {
             try {
                 EraseRecords();
-            } catch (Exception) {
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
-                throw;
+        private void GenerateXMLFromDataGridViewClocks() {
+            try {
+                string xmlFile = string.Format(@"{0}\model\clocks.xml", Directory.GetParent(Environment.CurrentDirectory).Parent.FullName);
+                if (File.Exists(xmlFile)) {
+                    MessageBox.Show("Deleteing");
+                    File.Delete(xmlFile);
+                }
+                using (XmlWriter writer = XmlWriter.Create(xmlFile)) {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("clocks");
+                    foreach (DataGridViewRow clock in dataGridViewClocks.Rows) {
+                        writer.WriteStartElement("clock");
+                        writer.WriteElementString("ip", clock.Cells["clocksIP"].Value.ToString());
+                        writer.WriteEndElement();
+                    }
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void buttonAdd_Click(object sender, EventArgs e) {
+            if (maskedTextBoxClockIP.MaskCompleted) {
+                string ip = maskedTextBoxClockIP.Text;
+                dataGridViewClocks.Rows.Add(ip);
+                GenerateXMLFromDataGridViewClocks();
+            } else {
+                errorProviderClocksIP.SetError(maskedTextBoxClockIP, "Introduzca todos los digitos.");
+            }
+        }
+
+        private void dataGridViewClocks_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+            var senderGrid = (DataGridView)sender;
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
+                senderGrid.Rows.RemoveAt(e.RowIndex);
+                GenerateXMLFromDataGridViewClocks();
             }
         }
     }

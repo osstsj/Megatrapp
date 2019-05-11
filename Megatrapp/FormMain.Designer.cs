@@ -48,7 +48,6 @@
             this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClocks = new System.Windows.Forms.TabPage();
             this.splitContainerClocks = new System.Windows.Forms.SplitContainer();
-            this.maskedTextBoxClockIP = new System.Windows.Forms.MaskedTextBox();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.labelClockIP = new System.Windows.Forms.Label();
             this.dataGridViewClocks = new System.Windows.Forms.DataGridView();
@@ -64,6 +63,7 @@
             this.workCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerApp = new System.Windows.Forms.Timer(this.components);
             this.errorProviderClocksIP = new System.Windows.Forms.ErrorProvider(this.components);
+            this.textBoxNewClockIP = new System.Windows.Forms.TextBox();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -273,7 +273,7 @@
             // 
             // splitContainerClocks.Panel1
             // 
-            this.splitContainerClocks.Panel1.Controls.Add(this.maskedTextBoxClockIP);
+            this.splitContainerClocks.Panel1.Controls.Add(this.textBoxNewClockIP);
             this.splitContainerClocks.Panel1.Controls.Add(this.buttonAdd);
             this.splitContainerClocks.Panel1.Controls.Add(this.labelClockIP);
             // 
@@ -281,22 +281,12 @@
             // 
             this.splitContainerClocks.Panel2.Controls.Add(this.dataGridViewClocks);
             this.splitContainerClocks.Size = new System.Drawing.Size(794, 319);
-            this.splitContainerClocks.SplitterDistance = 322;
+            this.splitContainerClocks.SplitterDistance = 334;
             this.splitContainerClocks.TabIndex = 0;
-            // 
-            // maskedTextBoxClockIP
-            // 
-            this.maskedTextBoxClockIP.BeepOnError = true;
-            this.maskedTextBoxClockIP.InsertKeyMode = System.Windows.Forms.InsertKeyMode.Overwrite;
-            this.maskedTextBoxClockIP.Location = new System.Drawing.Point(160, 125);
-            this.maskedTextBoxClockIP.Mask = "000.000.000.000";
-            this.maskedTextBoxClockIP.Name = "maskedTextBoxClockIP";
-            this.maskedTextBoxClockIP.Size = new System.Drawing.Size(141, 29);
-            this.maskedTextBoxClockIP.TabIndex = 3;
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(225, 160);
+            this.buttonAdd.Location = new System.Drawing.Point(243, 173);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(76, 33);
             this.buttonAdd.TabIndex = 2;
@@ -326,7 +316,7 @@
             this.dataGridViewClocks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewClocks.Name = "dataGridViewClocks";
             this.dataGridViewClocks.ReadOnly = true;
-            this.dataGridViewClocks.Size = new System.Drawing.Size(468, 319);
+            this.dataGridViewClocks.Size = new System.Drawing.Size(456, 319);
             this.dataGridViewClocks.TabIndex = 0;
             this.dataGridViewClocks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewClocks_CellContentClick);
             // 
@@ -425,6 +415,15 @@
             // 
             this.errorProviderClocksIP.ContainerControl = this;
             // 
+            // textBoxNewClockIP
+            // 
+            this.textBoxNewClockIP.Location = new System.Drawing.Point(151, 125);
+            this.textBoxNewClockIP.MaxLength = 16;
+            this.textBoxNewClockIP.Name = "textBoxNewClockIP";
+            this.textBoxNewClockIP.Size = new System.Drawing.Size(168, 29);
+            this.textBoxNewClockIP.TabIndex = 3;
+            this.textBoxNewClockIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNewClockIP_KeyPress);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
@@ -492,13 +491,13 @@
         private System.Windows.Forms.Timer timerApp;
         private System.Windows.Forms.Button buttonEraseAttendanceRecords;
         private System.Windows.Forms.SplitContainer splitContainerClocks;
-        private System.Windows.Forms.MaskedTextBox maskedTextBoxClockIP;
         private System.Windows.Forms.Button buttonAdd;
         private System.Windows.Forms.Label labelClockIP;
         private System.Windows.Forms.DataGridView dataGridViewClocks;
         private System.Windows.Forms.ErrorProvider errorProviderClocksIP;
         private System.Windows.Forms.DataGridViewTextBoxColumn clocksIP;
         private System.Windows.Forms.DataGridViewButtonColumn deleteClock;
+        private System.Windows.Forms.TextBox textBoxNewClockIP;
     }
 }
 

@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.menuMainWindow = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMainWindow = new System.Windows.Forms.TabControl();
             this.tabStatus = new System.Windows.Forms.TabPage();
@@ -48,6 +47,7 @@
             this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClocks = new System.Windows.Forms.TabPage();
             this.splitContainerClocks = new System.Windows.Forms.SplitContainer();
+            this.textBoxNewClockIP = new System.Windows.Forms.TextBox();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.labelClockIP = new System.Windows.Forms.Label();
             this.dataGridViewClocks = new System.Windows.Forms.DataGridView();
@@ -63,7 +63,6 @@
             this.workCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerApp = new System.Windows.Forms.Timer(this.components);
             this.errorProviderClocksIP = new System.Windows.Forms.ErrorProvider(this.components);
-            this.textBoxNewClockIP = new System.Windows.Forms.TextBox();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -94,22 +93,15 @@
             // archivoToolStripMenuItem
             // 
             this.archivoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nuevoToolStripMenuItem,
             this.salirToolStripMenuItem});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
             this.archivoToolStripMenuItem.Size = new System.Drawing.Size(60, 19);
             this.archivoToolStripMenuItem.Text = "Archivo";
             // 
-            // nuevoToolStripMenuItem
-            // 
-            this.nuevoToolStripMenuItem.Name = "nuevoToolStripMenuItem";
-            this.nuevoToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
-            this.nuevoToolStripMenuItem.Text = "Nuevo";
-            // 
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
             this.salirToolStripMenuItem.Text = "Salir";
             // 
             // tabControlMainWindow
@@ -161,11 +153,11 @@
             this.buttonEraseAttendanceRecords.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonEraseAttendanceRecords.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonEraseAttendanceRecords.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonEraseAttendanceRecords.Location = new System.Drawing.Point(83, 222);
+            this.buttonEraseAttendanceRecords.Location = new System.Drawing.Point(64, 222);
             this.buttonEraseAttendanceRecords.Name = "buttonEraseAttendanceRecords";
-            this.buttonEraseAttendanceRecords.Size = new System.Drawing.Size(98, 33);
+            this.buttonEraseAttendanceRecords.Size = new System.Drawing.Size(135, 33);
             this.buttonEraseAttendanceRecords.TabIndex = 2;
-            this.buttonEraseAttendanceRecords.Text = "&Borrar";
+            this.buttonEraseAttendanceRecords.Text = "&Borrar Registros";
             this.buttonEraseAttendanceRecords.UseVisualStyleBackColor = true;
             this.buttonEraseAttendanceRecords.Click += new System.EventHandler(this.buttonEraseAttendanceRecords_Click);
             // 
@@ -188,7 +180,7 @@
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(98, 33);
             this.buttonRun.TabIndex = 1;
-            this.buttonRun.Text = "&Iniciar";
+            this.buttonRun.Text = "&Respaldar";
             this.buttonRun.UseVisualStyleBackColor = true;
             this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
             // 
@@ -283,6 +275,15 @@
             this.splitContainerClocks.Size = new System.Drawing.Size(794, 319);
             this.splitContainerClocks.SplitterDistance = 334;
             this.splitContainerClocks.TabIndex = 0;
+            // 
+            // textBoxNewClockIP
+            // 
+            this.textBoxNewClockIP.Location = new System.Drawing.Point(151, 125);
+            this.textBoxNewClockIP.MaxLength = 16;
+            this.textBoxNewClockIP.Name = "textBoxNewClockIP";
+            this.textBoxNewClockIP.Size = new System.Drawing.Size(168, 29);
+            this.textBoxNewClockIP.TabIndex = 3;
+            this.textBoxNewClockIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNewClockIP_KeyPress);
             // 
             // buttonAdd
             // 
@@ -415,15 +416,6 @@
             // 
             this.errorProviderClocksIP.ContainerControl = this;
             // 
-            // textBoxNewClockIP
-            // 
-            this.textBoxNewClockIP.Location = new System.Drawing.Point(151, 125);
-            this.textBoxNewClockIP.MaxLength = 16;
-            this.textBoxNewClockIP.Name = "textBoxNewClockIP";
-            this.textBoxNewClockIP.Size = new System.Drawing.Size(168, 29);
-            this.textBoxNewClockIP.TabIndex = 3;
-            this.textBoxNewClockIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNewClockIP_KeyPress);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
@@ -465,7 +457,6 @@
 
         private System.Windows.Forms.MenuStrip menuMainWindow;
         private System.Windows.Forms.ToolStripMenuItem archivoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nuevoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControlMainWindow;
         private System.Windows.Forms.TabPage tabStatus;

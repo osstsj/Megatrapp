@@ -85,16 +85,8 @@ namespace Megatrapp
 
         private void buttonRun_Click(object sender, EventArgs e) {
             try {
-                if (buttonRun.Text == "&Iniciar") {
-                    buttonRun.Text = "&Detener";                    
-                    timerApp.Enabled = true;
-                    DownloadRecords();
-                    labelStatus.Text = "Registros descargados";
-                } else {
-                    buttonRun.Text = "&Iniciar";
-                    labelStatus.Text = "Detenido";
-                    timerApp.Enabled = false;
-                }
+                DownloadRecords();
+                labelStatus.Text = "Registros descargados";
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
@@ -184,7 +176,11 @@ namespace Megatrapp
 
         private void buttonEraseAttendanceRecords_Click(object sender, EventArgs e) {
             try {
-                EraseRecords();
+                DialogResult result = MessageBox.Show("Seguro que deseas borrar los registros?", "Alerta", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.Yes) {
+                    EraseRecords();
+                    labelStatus.Text = "Registros borrados";
+                }
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }

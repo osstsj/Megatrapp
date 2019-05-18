@@ -13,12 +13,19 @@ namespace Megatrapp.model {
         public string Password { get; set; }
         public int Privilege { get; set; }
 
+        public Employee() {
+        }
+
         public Employee(string enrollNumber, int machineNumber, string name, string password, int privilege) {
             EnrollNumber = enrollNumber;
             MachineNumber = machineNumber;
             Name = name;
             Password = password;
             Privilege = privilege;
+        }
+
+        public Employee(string name) {
+            Name = name;
         }
     }
 }

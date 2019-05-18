@@ -15,12 +15,16 @@ using System.Threading;
 using System.Xml;
 using System.IO;
 using System.Net;
+using System.Configuration;
+using Megatrapp.dao;
+using Megatrapp.helper;
 
 namespace Megatrapp
 {    public partial class frmMain : Form {
 
         private System.Threading.Timer timer;
         private List<string> clocksList;
+        private Employee modifiedEmployee;
 
         public frmMain() {
             InitializeComponent();
@@ -47,7 +51,7 @@ namespace Megatrapp
             if (clocksList.Count > 0) {
                 // Send to DB
                 EraseRecords();
-                DownloadRecords();
+                BackupAttendanceRecords();
             }
         }
 
@@ -56,6 +60,7 @@ namespace Megatrapp
             // 1000 = 1 second
             timerApp.Interval = 1000 * 60 * 15;
             SetUpTimer(new TimeSpan(00, 00, 00));
+
             clocksList = new List<string>();
             GetClocksFromXMLFile();
             foreach (var clockIP in clocksList) {
@@ -74,7 +79,6 @@ namespace Megatrapp
                             switch (reader.Name.ToString()) {
                                 case "ip":
                                     clocksList.Add(reader.ReadString());
-                                    Console.WriteLine("IP is " + reader.ReadString());
                                     break;
                             }
                         }
@@ -85,27 +89,35 @@ namespace Megatrapp
 
         private void buttonRun_Click(object sender, EventArgs e) {
             try {
-                if (buttonRun.Text == "&Iniciar") {
-                    buttonRun.Text = "&Detener";                    
-                    timerApp.Enabled = true;
-                    DownloadRecords();
-                    labelStatus.Text = "Registros descargados";
-                } else {
-                    buttonRun.Text = "&Iniciar";
-                    labelStatus.Text = "Detenido";
-                    timerApp.Enabled = false;
+                BackupAttendanceRecords();
+                labelStatus.Text = "Registros descargados";
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void UploadAttendanceRecordsToDatabase(List<AttendanceRecord> recordList, List<Employee> employeeList) {
+            try {
+                AttendanceRecordDAO attendanceRecordDAO = new AttendanceRecordDAO();
+                EmployeeDAO employeeDAO = new EmployeeDAO();
+                foreach (AttendanceRecord record in recordList) {
+                    Console.WriteLine("Add attendance record resulted in: " + attendanceRecordDAO.Add(record));
+                }
+                foreach (Employee employee in employeeList) {
+                    Console.WriteLine("Add employee resulted in: " + employeeDAO.Add(employee));
                 }
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
         }
 
-        private void DownloadRecords() {
+        private void BackupAttendanceRecords() {
             try {
                 foreach (var clockIP in clocksList) {
                     ZKHelper zKHelper = new ZKHelper();
                     if (zKHelper.ConnectTCP(clockIP, dataGridViewAttendanceRecords) == 1) {
                         ClearDataGridViewAttendanceRecords();
+                        ClearDataGridViewUsers();
                         // The if is in case the GUI needs to be updated from another thread
                         if (labelStatus.InvokeRequired) {
                             labelStatus.Invoke(new MethodInvoker(() => labelStatus.Text = "Registros descargados"));
@@ -119,6 +131,7 @@ namespace Megatrapp
                         FillDataGridAttendanceRecords(records, employees);
                         zKHelper.SetDeviceState(true);
                         zKHelper.Disconnect();
+                        UploadAttendanceRecordsToDatabase(records, employees);
                     }
                 }
             } catch (Exception ex) {
@@ -140,8 +153,23 @@ namespace Megatrapp
                 }
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
+            }   
+        }
+
+        private void UpdateUserInfoInAllClocks() {
+            try {
+                foreach (var clockIP in clocksList) {
+                    ZKHelper zKHelper = new ZKHelper();
+                    if (zKHelper.ConnectTCP(clockIP, dataGridViewAttendanceRecords) == 1) {
+                        zKHelper.SetDeviceState(false);
+                        Console.WriteLine("User updated return value: " + zKHelper.UpdateUserInfo(modifiedEmployee));
+                        zKHelper.SetDeviceState(true);
+                        zKHelper.Disconnect();
+                    }
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
-            
         }
 
         private void ClearDataGridViewAttendanceRecords() {
@@ -151,6 +179,15 @@ namespace Megatrapp
             } else {
                 dataGridViewAttendanceRecords.Rows.Clear();
             }            
+        }
+
+        private void ClearDataGridViewUsers() {
+            // The if is in case the GUI needs to be updated from another thread
+            if (dataGridViewUsers.InvokeRequired) {
+                dataGridViewUsers.Invoke(new MethodInvoker(() => dataGridViewUsers.Rows.Clear()));
+            } else {
+                dataGridViewUsers.Rows.Clear();
+            }
         }
 
         private void FillDataGridEmployees(List<Employee> employees) {
@@ -167,24 +204,26 @@ namespace Megatrapp
         private void FillDataGridAttendanceRecords(List<AttendanceRecord> records, List<Employee> employees) {
             foreach (AttendanceRecord record in records) {
                 Employee employee = employees.Find(employeeX => employeeX.EnrollNumber == record.EnrollNumber);
-                string hour = record.Hour + ":" + record.Minute;
-                string date = record.Day + "/" + record.Month + "/" + record.Year;
                 // The if is in case the GUI needs to be updated from another thread
                 if (dataGridViewAttendanceRecords.InvokeRequired) {
-                    dataGridViewAttendanceRecords.Invoke(new MethodInvoker(() => dataGridViewAttendanceRecords.Rows.Add(employee.EnrollNumber, employee.Name, hour, date, record.InOutMode, record.WorkCode)));
+                    dataGridViewAttendanceRecords.Invoke(new MethodInvoker(() => dataGridViewAttendanceRecords.Rows.Add(employee.EnrollNumber, employee.Name, record.dateTime)));
                 } else {
-                    dataGridViewAttendanceRecords.Rows.Add(employee.EnrollNumber, employee.Name, hour, date, record.InOutMode, record.WorkCode);
+                    dataGridViewAttendanceRecords.Rows.Add(employee.EnrollNumber, employee.Name, record.dateTime);
                 }
             }
         }
 
         private void timerApp_Tick(object sender, EventArgs e) {
-            DownloadRecords();
+            BackupAttendanceRecords();
         }
 
         private void buttonEraseAttendanceRecords_Click(object sender, EventArgs e) {
             try {
-                EraseRecords();
+                DialogResult result = MessageBox.Show("Seguro que deseas borrar los registros?", "Alerta", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (result == DialogResult.Yes) {
+                    EraseRecords();
+                    labelStatus.Text = "Registros borrados";
+                }
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
             }
@@ -239,9 +278,16 @@ namespace Megatrapp
         private bool ValidateNewClockIP() {
             try {
                 string ip = textBoxNewClockIP.Text;
-                if (ip.Length < 9 
-                    || CountDotsInString(ip) != 4
-                    || ip.Any(Char.IsWhiteSpace)) {
+                if (ip.Length < 9) {
+                    MessageBox.Show("Cuenta con menos de 9 caracteres.");
+                    return false;
+                }
+                if (CountDotsInString(ip) != 3) {
+                    MessageBox.Show("Tiene menos de 4 bytes.");
+                    return false;
+                }
+                if (ip.Any(Char.IsWhiteSpace)) {
+                    MessageBox.Show("Contiene un espacio dentro de la cadena.");
                     return false;
                 }
             } catch (Exception ex) {
@@ -285,7 +331,24 @@ namespace Megatrapp
                 errorProviderClocksIP.Clear();
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
-                throw;
+            }
+        }
+
+        private void dataGridViewUsers_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
+            UpdateUserInfoInAllClocks();
+        }
+
+        private void dataGridViewUsers_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e) {
+            var senderGrid = (DataGridView)sender;
+            string employeeId = senderGrid["enrollNumber", e.RowIndex].Value.ToString();
+            int.TryParse(senderGrid["machineNumberColumn", e.RowIndex].Value.ToString(), out int machineNumber);
+            string employeeName = senderGrid["nameColumn", e.RowIndex].Value.ToString();
+            string password = senderGrid["passwordColumn", e.RowIndex].Value.ToString();
+            int.TryParse(senderGrid["privilegeColumn", e.RowIndex].Value.ToString(), out int privilege);
+            if (privilege < 0 || privilege > 3) {
+                MessageBox.Show("Los valores de privilegio deben ser entre 0(usuario) y 3(superadmin)");
+            } else {
+                modifiedEmployee = new Employee(employeeId, machineNumber, employeeName, password, privilege);
             }
         }
     }

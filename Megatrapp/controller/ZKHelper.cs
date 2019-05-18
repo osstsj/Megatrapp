@@ -47,6 +47,7 @@ namespace Megatrapp.controller {
                 if (deviceIsConnected) {
                     serviceController.Disconnect();
                     // To be implemented
+                    // Doesn't work in older devices
                     //UnregisterRealTime();
                     SetConnectionState(false);
                     return -2;
@@ -61,9 +62,10 @@ namespace Megatrapp.controller {
                     serviceController.GetLastError(ref dwErrorCore);
                     return dwErrorCore;
                 }
-            } catch (Exception) {
-                throw;
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
+            return 0;
         }
 
         public void SetDeviceState(bool flag) {
@@ -90,6 +92,17 @@ namespace Megatrapp.controller {
             return employees;
         }
 
+        public bool UpdateUserInfo(Employee employee) {
+            try {
+                bool result = serviceController.SSR_SetUserInfo(machineNumber, employee.EnrollNumber, employee.Name, employee.Password, employee.Privilege, true);
+                serviceController.RefreshData(machineNumber);
+                return result;
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+                throw;
+            }
+        }
+
         public List<AttendanceRecord> DownloadAttendanceData() {
             string enrollNumber = "";
             int verifyMode = 0;
@@ -106,7 +119,9 @@ namespace Megatrapp.controller {
             serviceController.ReadAllGLogData(machineNumber);
             while (serviceController.SSR_GetGeneralLogData(machineNumber, out enrollNumber, out verifyMode,
                     out inOutMode, out year, out month, out day, out hour, out minute, out second, ref workCode)) {
-                records.Add(new AttendanceRecord(machineNumber, enrollNumber, verifyMode, inOutMode, year, month, day, hour, minute, second, workCode));
+                var dateTime = new DateTime(year, month, day, hour, minute, second);
+                Console.WriteLine(dateTime);
+                records.Add(new AttendanceRecord(enrollNumber, dateTime));
             }
             return records;
         }
@@ -140,6 +155,7 @@ namespace Megatrapp.controller {
             if (GetConnectionState()) {
                 serviceController.Disconnect();
                 // To be implemented
+                // Doesn't work in older devices
                 //UnregisterRealTime();
             }
         }

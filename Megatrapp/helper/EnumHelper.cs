@@ -27,7 +27,7 @@ namespace Megatrapp.model {
             User = 0,
             Enroller = 1,
             Admin = 2,
-            Supervisor = 3, //SuperAdmin?
+            Superadmin = 3, //SuperAdmin?
         }
 
         public enum EventMask {

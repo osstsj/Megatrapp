@@ -57,10 +57,7 @@
             this.dataGridViewAttendanceRecords = new System.Windows.Forms.DataGridView();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.employeeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.inOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.workCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerApp = new System.Windows.Forms.Timer(this.components);
             this.errorProviderClocksIP = new System.Windows.Forms.ErrorProvider(this.components);
             this.menuMainWindow.SuspendLayout();
@@ -176,11 +173,11 @@
             this.buttonRun.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRun.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonRun.Location = new System.Drawing.Point(347, 222);
+            this.buttonRun.Location = new System.Drawing.Point(311, 222);
             this.buttonRun.Name = "buttonRun";
-            this.buttonRun.Size = new System.Drawing.Size(98, 33);
+            this.buttonRun.Size = new System.Drawing.Size(169, 33);
             this.buttonRun.TabIndex = 1;
-            this.buttonRun.Text = "&Respaldar";
+            this.buttonRun.Text = "&Respaldar registros";
             this.buttonRun.UseVisualStyleBackColor = true;
             this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
             // 
@@ -211,12 +208,14 @@
             this.dataGridViewUsers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewUsers.Location = new System.Drawing.Point(4, 5);
             this.dataGridViewUsers.Name = "dataGridViewUsers";
-            this.dataGridViewUsers.ReadOnly = true;
             this.dataGridViewUsers.Size = new System.Drawing.Size(794, 319);
             this.dataGridViewUsers.TabIndex = 0;
+            this.dataGridViewUsers.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewUsers_CellBeginEdit);
+            this.dataGridViewUsers.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewUsers_CellEndEdit);
             // 
             // enrollNumber
             // 
+            this.enrollNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.enrollNumber.HeaderText = "ID";
             this.enrollNumber.Name = "enrollNumber";
             this.enrollNumber.ReadOnly = true;
@@ -225,19 +224,16 @@
             // 
             this.nameColumn.HeaderText = "Nombre";
             this.nameColumn.Name = "nameColumn";
-            this.nameColumn.ReadOnly = true;
             // 
             // privilegeColumn
             // 
             this.privilegeColumn.HeaderText = "Privilegio";
             this.privilegeColumn.Name = "privilegeColumn";
-            this.privilegeColumn.ReadOnly = true;
             // 
             // passwordColumn
             // 
             this.passwordColumn.HeaderText = "Password";
             this.passwordColumn.Name = "passwordColumn";
-            this.passwordColumn.ReadOnly = true;
             // 
             // machineNumberColumn
             // 
@@ -353,17 +349,13 @@
             // 
             this.dataGridViewAttendanceRecords.AllowUserToAddRows = false;
             this.dataGridViewAttendanceRecords.AllowUserToDeleteRows = false;
-            this.dataGridViewAttendanceRecords.AllowUserToResizeColumns = false;
             this.dataGridViewAttendanceRecords.AllowUserToResizeRows = false;
             this.dataGridViewAttendanceRecords.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewAttendanceRecords.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewAttendanceRecords.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ID,
             this.employeeName,
-            this.time,
-            this.date,
-            this.inOut,
-            this.workCode});
+            this.date});
             this.dataGridViewAttendanceRecords.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewAttendanceRecords.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewAttendanceRecords.Name = "dataGridViewAttendanceRecords";
@@ -383,29 +375,11 @@
             this.employeeName.Name = "employeeName";
             this.employeeName.ReadOnly = true;
             // 
-            // time
-            // 
-            this.time.HeaderText = "Hora";
-            this.time.Name = "time";
-            this.time.ReadOnly = true;
-            // 
             // date
             // 
             this.date.HeaderText = "Fecha";
             this.date.Name = "date";
             this.date.ReadOnly = true;
-            // 
-            // inOut
-            // 
-            this.inOut.HeaderText = "Entrada/Salida";
-            this.inOut.Name = "inOut";
-            this.inOut.ReadOnly = true;
-            // 
-            // workCode
-            // 
-            this.workCode.HeaderText = "WorkCode";
-            this.workCode.Name = "workCode";
-            this.workCode.ReadOnly = true;
             // 
             // timerApp
             // 
@@ -467,18 +441,7 @@
         private System.Windows.Forms.Button buttonRun;
         private System.Windows.Forms.DataGridView dataGridViewUsers;
         private System.Windows.Forms.TabPage tabAttendanceRecords;
-        private System.Windows.Forms.DataGridViewTextBoxColumn enrollNumber;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn privilegeColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn passwordColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn machineNumberColumn;
         private System.Windows.Forms.DataGridView dataGridViewAttendanceRecords;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn employeeName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn time;
-        private System.Windows.Forms.DataGridViewTextBoxColumn date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn inOut;
-        private System.Windows.Forms.DataGridViewTextBoxColumn workCode;
         private System.Windows.Forms.Timer timerApp;
         private System.Windows.Forms.Button buttonEraseAttendanceRecords;
         private System.Windows.Forms.SplitContainer splitContainerClocks;
@@ -489,6 +452,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn clocksIP;
         private System.Windows.Forms.DataGridViewButtonColumn deleteClock;
         private System.Windows.Forms.TextBox textBoxNewClockIP;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn employeeName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn enrollNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn privilegeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn passwordColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn machineNumberColumn;
     }
 }
 

@@ -100,11 +100,50 @@ namespace Megatrapp
             try {
                 AttendanceRecordDAO attendanceRecordDAO = new AttendanceRecordDAO();
                 EmployeeDAO employeeDAO = new EmployeeDAO();
+                UnidentifiedEmployeeDAO unidentifiedEmployeeDAO = new UnidentifiedEmployeeDAO();
+                UnidentifiedAttendanceRecordDAO unidentifiedAttendanceRecordDAO = new UnidentifiedAttendanceRecordDAO();
+                Console.WriteLine("Iterating through the record list");
                 foreach (AttendanceRecord record in recordList) {
-                    Console.WriteLine("Add attendance record resulted in: " + attendanceRecordDAO.Add(record));
-                }
-                foreach (Employee employee in employeeList) {
-                    Console.WriteLine("Add employee resulted in: " + employeeDAO.Add(employee));
+                    Console.WriteLine("####################################################");
+                    bool wasUnidentified = false;
+                    string name = "";
+                    // Iterate through the employees to find the matching internal enrollNumber for each machine
+                    // once it finds the match it saves it to the DB and stores some data for later use
+                    foreach (Employee employee in employeeList) {
+                        if (string.IsNullOrEmpty(employee.Name)) {
+                            Console.WriteLine("Ignoring users without name");
+                        } else {
+                            if (employee.EnrollNumber == record.EnrollNumber) {
+                                Console.WriteLine("Found a match between employee and attendance record");
+                                // If employee exists skip, else insert it into unidentified employees
+                                if (string.IsNullOrEmpty(employeeDAO.GetEmployeeByName(employee.Name).Name)) {
+                                    wasUnidentified = true;
+                                    Console.WriteLine("Add unidentified employee resulted in: " + unidentifiedEmployeeDAO.Add(employee));
+                                } else {
+                                    wasUnidentified = false;
+                                    Console.WriteLine("Add employee resulted in: " + employeeDAO.Add(employee));
+                                }
+                                name = employee.Name;
+                                employeeList.Remove(employee);
+                                // if the employee was NOT identified, get the unidentified id and save it
+                                if (wasUnidentified) {
+                                    Console.WriteLine("Storing UNidentified record");
+                                    Employee unidentifiedEmployee = unidentifiedEmployeeDAO.GetUnidentifiedEmployeeByName(name);
+                                    record.EnrollNumber = unidentifiedEmployee.EnrollNumber;
+                                    unidentifiedAttendanceRecordDAO.Add(record);
+                                } else {
+                                    // if the employee was identified obtain it's id from the actual DB (not the clock machine)
+                                    // and save the attendance record
+                                    Console.WriteLine("Storing identified record");
+                                    Employee identifiedEmployee = employeeDAO.GetEmployeeByName(name);
+                                    record.EnrollNumber = identifiedEmployee.EnrollNumber;
+                                    attendanceRecordDAO.Add(record);
+                                }
+                                Console.WriteLine("Succesfully stored the attendance record");
+                                break;
+                            }
+                        }
+                    }   
                 }
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);

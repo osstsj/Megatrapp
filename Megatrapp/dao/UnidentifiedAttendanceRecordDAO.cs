@@ -4,19 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Megatrapp.helper;
+using Megatrapp.model;
 using System.Configuration;
 using Npgsql;
-using Megatrapp.model;
 using NpgsqlTypes;
-using System.Collections;
 
 namespace Megatrapp.dao {
-    class AttendanceRecordDAO : IRepository<AttendanceRecord> {
+    class UnidentifiedAttendanceRecordDAO : IRepository<AttendanceRecord> {
 
-        // Example insert query
-        // INSERT INTO main_employeeaccount(username, email, "password", "passwordSalt", "passwordHashAlgorithm", "passwordReminderToken", "passwordReminderExpiration") VALUES ('eduardoalbertorg', 'passw0rd', 'passw0rd', 'passw0rd', 'passw0rd', 'passw0rd', CURRENT_TIMESTAMP);
-        string INSERT_QUERY = "INSERT INTO main_attendancerecord(attendance_record, employee_id) VALUES(@time, @employee_id)";
-        string SELECT_ALL_QUERY = "SELECT * FROM public.main_employeeaccount";
+        string INSERT_QUERY = "INSERT INTO main_unidentifiedattendancerecord(attendance_record, unidentified_employee_id) VALUES(@time, @employee_id)";
 
         public int Add(AttendanceRecord entity) {
             string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
@@ -26,7 +22,7 @@ namespace Megatrapp.dao {
                 Console.WriteLine("Preparing to add a new row into main_attendancerecord");
                 using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
                     using (var cmd = new NpgsqlCommand(INSERT_QUERY, connection)) {
-                        Console.WriteLine("Connection stablished with db for table main_attendancerecord");
+                        Console.WriteLine("Connection stablished with db for table main_unidentifiedattendancerecord");
                         connection.Open();
                         Console.WriteLine("Swapping timestamp value with " + entity.dateTime);
                         cmd.Parameters.AddWithValue("time", NpgsqlDbType.Timestamp, entity.dateTime);
@@ -44,33 +40,13 @@ namespace Megatrapp.dao {
             return -1;
         }
 
-        public List<AttendanceRecord> GetAll() {
-            string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
-            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
-                using (var cmd = new NpgsqlCommand(SELECT_ALL_QUERY, connection)) {
-                    connection.Open();
-                    cmd.Prepare();
-                    NpgsqlDataReader reader = cmd.ExecuteReader();
-                    List<AttendanceRecord> records = new List<AttendanceRecord>();
-                    while (reader.Read()) {
-                        var idEmployee = reader["employee_id"].ToString();
-                        var register = DateTime.Parse(reader["attendance_record"].ToString());
-                        records.Add(new AttendanceRecord(idEmployee, register));
-                    }
-                    connection.Close();
-                    return records;
-                }
-
-            }
-        }
-
         public int Delete(AttendanceRecord entity) {
             throw new NotImplementedException();
         }
 
         public int Get(AttendanceRecord entity) {
             string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
-            string checkDuplicateQuery = "SELECT * FROM main_attendancerecord WHERE attendance_record = @time AND employee_id = @id";
+            string checkDuplicateQuery = "SELECT * FROM main_unidentifiedattendancerecord WHERE attendance_record = @time AND unidentified_employee_id = @id";
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
                 using (var cmd = new NpgsqlCommand(checkDuplicateQuery, connection)) {
                     connection.Open();
@@ -81,7 +57,7 @@ namespace Megatrapp.dao {
                     NpgsqlDataReader reader = cmd.ExecuteReader();
                     List<AttendanceRecord> records = new List<AttendanceRecord>();
                     while (reader.Read()) {
-                        var idEmployee = reader["employee_id"].ToString();
+                        var idEmployee = reader["unidentified_employee_id"].ToString();
                         var register = DateTime.Parse(reader["attendance_record"].ToString());
                         records.Add(new AttendanceRecord(idEmployee, register));
                     }
@@ -92,23 +68,11 @@ namespace Megatrapp.dao {
         }
 
         public int Get(string query) {
-            string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
-            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
-                using (var cmd = new NpgsqlCommand(query, connection)) {
-                    connection.Open();
-                    cmd.Prepare();
-                    NpgsqlDataReader reader = cmd.ExecuteReader();
-                    List<AttendanceRecord> records = new List<AttendanceRecord>();
-                    while (reader.Read()) {
-                        var idEmployee = reader["employee_id"].ToString();
-                        var register = DateTime.Parse(reader["register"].ToString());
-                        records.Add(new AttendanceRecord(idEmployee, register));
-                    }
-                    connection.Close();
-                    return records.Count();
-                }
+            throw new NotImplementedException();
+        }
 
-            }
+        public List<AttendanceRecord> GetAll() {
+            throw new NotImplementedException();
         }
 
         public int Update(AttendanceRecord entity) {

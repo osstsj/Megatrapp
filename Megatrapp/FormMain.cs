@@ -51,7 +51,7 @@ namespace Megatrapp
             if (clocksList.Count > 0) {
                 // Send to DB
                 EraseRecords();
-                BackupAttendanceRecords();
+                BackUpAttendanceAndEmployees();
             }
         }
 
@@ -89,7 +89,7 @@ namespace Megatrapp
 
         private void buttonRun_Click(object sender, EventArgs e) {
             try {
-                BackupAttendanceRecords();
+                BackUpAttendanceAndEmployees();
                 labelStatus.Text = "Registros descargados";
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
@@ -150,13 +150,17 @@ namespace Megatrapp
             }
         }
 
-        private void BackupAttendanceRecords() {
+        private void RefreshDGVEmployees(List<Employee> employeeList) {
+            ClearDataGridViewUsers();
+            FillDataGridEmployees(employeeList);
+        }
+
+        private void BackUpAttendanceAndEmployees() {
             try {
                 foreach (var clockIP in clocksList) {
                     ZKHelper zKHelper = new ZKHelper();
                     if (zKHelper.ConnectTCP(clockIP, dataGridViewAttendanceRecords) == 1) {
                         ClearDataGridViewAttendanceRecords();
-                        ClearDataGridViewUsers();
                         // The if is in case the GUI needs to be updated from another thread
                         if (labelStatus.InvokeRequired) {
                             labelStatus.Invoke(new MethodInvoker(() => labelStatus.Text = "Registros descargados"));
@@ -166,7 +170,7 @@ namespace Megatrapp
                         zKHelper.SetDeviceState(false);
                         List<Employee> employees = zKHelper.GetAllUsersInfo();
                         List<AttendanceRecord> records = zKHelper.DownloadAttendanceData();
-                        FillDataGridEmployees(employees);
+                        RefreshDGVEmployees(employees);
                         FillDataGridAttendanceRecords(records, employees);
                         zKHelper.SetDeviceState(true);
                         zKHelper.Disconnect();
@@ -253,7 +257,7 @@ namespace Megatrapp
         }
 
         private void timerApp_Tick(object sender, EventArgs e) {
-            BackupAttendanceRecords();
+            BackUpAttendanceAndEmployees();
         }
 
         private void buttonEraseAttendanceRecords_Click(object sender, EventArgs e) {
@@ -374,6 +378,13 @@ namespace Megatrapp
         }
 
         private void dataGridViewUsers_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
+            var senderGrid = (DataGridView)sender;
+            string employeeId = senderGrid["enrollNumber", e.RowIndex].Value.ToString();
+            int.TryParse(senderGrid["machineNumberColumn", e.RowIndex].Value.ToString(), out int machineNumber);
+            string employeeName = senderGrid["nameColumn", e.RowIndex].Value.ToString();
+            string password = senderGrid["passwordColumn", e.RowIndex].Value.ToString();
+            int.TryParse(senderGrid["privilegeColumn", e.RowIndex].Value.ToString(), out int privilege);
+            modifiedEmployee = new Employee(employeeId, machineNumber, employeeName, password, privilege);
             UpdateUserInfoInAllClocks();
         }
 
@@ -386,8 +397,6 @@ namespace Megatrapp
             int.TryParse(senderGrid["privilegeColumn", e.RowIndex].Value.ToString(), out int privilege);
             if (privilege < 0 || privilege > 3) {
                 MessageBox.Show("Los valores de privilegio deben ser entre 0(usuario) y 3(superadmin)");
-            } else {
-                modifiedEmployee = new Employee(employeeId, machineNumber, employeeName, password, privilege);
             }
         }
     }

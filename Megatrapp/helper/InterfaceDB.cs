@@ -11,6 +11,6 @@ namespace Megatrapp.helper {
         int Delete(T entity);
         int Get(T entity);
         int Get(string query);
-        List<T> All();
+        List<T> GetAll();
     }
 }

@@ -27,5 +27,10 @@ namespace Megatrapp.model {
         public Employee(string name) {
             Name = name;
         }
+
+        override
+        public string ToString() {
+            return Name;
+        }
     }
 }

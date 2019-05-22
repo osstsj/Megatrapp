@@ -10,13 +10,10 @@ using Npgsql;
 using NpgsqlTypes;
 
 namespace Megatrapp.dao {
-    class EmployeeDAO : IRepository<Employee> {
+    class UnidentifiedEmployeeDAO : IRepository<Employee> {
 
-        // DB queries
-        const string INSERT_QUERY = "INSERT INTO main_employee(full_employee_name) VALUES(@name)";
-        const string SELECT_ALL_QUERY = "SELECT * FROM public.main_employee;";
-        const string SELECT_QUERY_BY_NAME = "SELECT * FROM public.main_employee WHERE full_employee_name = @name;";
-        const string SELECT_QUERY_BY_ID = "SELECT * FROM public.main_employee WHERE id = @id;";
+        const string INSERT_QUERY = "INSERT INTO main_unidentifiedemployee(full_name) VALUES(@name)";
+        const string SELECT_QUERY_BY_NAME = "SELECT * FROM public.main_unidentifiedemployee WHERE full_name = @name;";
 
         public int Add(Employee entity) {
             try {
@@ -39,11 +36,8 @@ namespace Megatrapp.dao {
                         break;
                 }
             }
+            Console.WriteLine("Couldn't add the employee");
             return -1;
-        }
-
-        public List<Employee> GetAll() {
-            throw new NotImplementedException();
         }
 
         public int Delete(Employee entity) {
@@ -54,25 +48,7 @@ namespace Megatrapp.dao {
             throw new NotImplementedException();
         }
 
-        public Employee GetEmployeeByID(int id) {
-            Employee employee = new Employee();
-            string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
-            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
-                using (var cmd = new NpgsqlCommand(SELECT_QUERY_BY_ID, connection)) {
-                    connection.Open();
-                    cmd.Parameters.AddWithValue("id", NpgsqlDbType.Integer, id);
-                    cmd.Prepare();
-                    NpgsqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read()) {
-                        employee.Name = reader["full_employee_name"].ToString();
-                        employee.EnrollNumber = reader["id"].ToString();
-                    }
-                }
-            }
-            return employee;
-        }
-
-        public Employee GetEmployeeByName(string name) {
+        public Employee GetUnidentifiedEmployeeByName(string name) {
             Employee employee = new Employee();
             string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
@@ -82,7 +58,7 @@ namespace Megatrapp.dao {
                     cmd.Prepare();
                     NpgsqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read()) {
-                        employee.Name = reader["full_employee_name"].ToString();
+                        employee.Name = reader["full_name"].ToString();
                         employee.EnrollNumber = reader["id"].ToString();
                     }
                 }
@@ -90,11 +66,15 @@ namespace Megatrapp.dao {
             return employee;
         }
 
-        public int Get(string query) {
+        public List<Employee> GetAll() {
             throw new NotImplementedException();
         }
 
         public int Update(Employee entity) {
+            throw new NotImplementedException();
+        }
+
+        public int Get(string query) {
             throw new NotImplementedException();
         }
     }

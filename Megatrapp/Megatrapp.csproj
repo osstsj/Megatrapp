@@ -73,8 +73,6 @@
     <Compile Include="controller\DatabaseHelper.cs" />
     <Compile Include="controller\ZKHelper.cs" />
     <Compile Include="dao\EmployeeDAO.cs" />
-    <Compile Include="dao\UnidentifiedAttendanceRecordDAO.cs" />
-    <Compile Include="dao\UnidentifiedEmployeeDAO.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

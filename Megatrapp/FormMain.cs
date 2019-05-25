@@ -89,6 +89,7 @@ namespace Megatrapp
 
         private void buttonRun_Click(object sender, EventArgs e) {
             try {
+                labelStatus.Text = "Obteniendo registros";
                 BackUpAttendanceAndEmployees();
                 labelStatus.Text = "Registros descargados";
             } catch (Exception ex) {
@@ -111,17 +112,18 @@ namespace Megatrapp
                         if (string.IsNullOrEmpty(employee.Name)) {
                             Console.WriteLine("Ignoring users without name");
                         } else {
+                            // If found a match between the employee and attendance record in the device
                             if (employee.EnrollNumber == record.EnrollNumber) {
-                                Console.WriteLine("Found a match between employee and attendance record");
                                 // If employee exists skip, else insert it into unidentified employees
+                                // Check in the DB for the employee's information
                                 if (string.IsNullOrEmpty(employeeDAO.GetEmployeeByName(employee.Name).Name)) {
                                     wasUnidentified = true;
                                     Console.WriteLine("Add unidentified employee resulted in: " + unidentifiedEmployeeDAO.Add(employee));
                                 } else {
                                     wasUnidentified = false;
-                                    Console.WriteLine("Add employee resulted in: " + employeeDAO.Add(employee));
                                 }
                                 name = employee.Name;
+                                // Remove the employee list so the next iteration runs faster
                                 employeeList.Remove(employee);
                                 // if the employee was NOT identified, get the unidentified id and save it
                                 if (wasUnidentified) {
@@ -167,7 +169,7 @@ namespace Megatrapp
                         FillDataGridAttendanceRecords(records, employees);
                         zKHelper.SetDeviceState(true);
                         zKHelper.Disconnect();
-                        //UploadAttendanceRecordsToDatabase(records, employees);
+                        UploadAttendanceRecordsToDatabase(records, employees);
                         // The if is in case the GUI needs to be updated from another thread
                         if (labelStatus.InvokeRequired) {
                             labelStatus.Invoke(new MethodInvoker(() => labelStatus.Text = "Registros descargados"));

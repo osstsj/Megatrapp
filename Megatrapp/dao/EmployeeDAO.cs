@@ -13,7 +13,7 @@ namespace Megatrapp.dao {
     class EmployeeDAO : IRepository<Employee> {
 
         // DB queries
-        const string INSERT_QUERY = "INSERT INTO main_employee(full_employee_name) VALUES(@name)";
+        const string INSERT_QUERY = "INSERT INTO main_employee(full_name) VALUES(@name)";
         const string SELECT_ALL_QUERY = "SELECT * FROM public.main_employee;";
         const string SELECT_QUERY_BY_NAME = "SELECT * FROM public.main_employee WHERE full_employee_name = @name;";
         const string SELECT_QUERY_BY_ID = "SELECT * FROM public.main_employee WHERE id = @id;";
@@ -64,7 +64,7 @@ namespace Megatrapp.dao {
                     cmd.Prepare();
                     NpgsqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read()) {
-                        employee.Name = reader["full_employee_name"].ToString();
+                        employee.Name = reader["full_name"].ToString();
                         employee.EnrollNumber = reader["id"].ToString();
                     }
                 }
@@ -82,7 +82,7 @@ namespace Megatrapp.dao {
                     cmd.Prepare();
                     NpgsqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read()) {
-                        employee.Name = reader["full_employee_name"].ToString();
+                        employee.Name = reader["full_name"].ToString();
                         employee.EnrollNumber = reader["id"].ToString();
                     }
                 }

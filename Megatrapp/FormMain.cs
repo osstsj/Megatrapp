@@ -38,7 +38,7 @@ namespace Megatrapp
                     return;//time already passed
                 }
                 this.timer = new System.Threading.Timer(x => {
-                    this.SomeMethodRunsAt0000();
+                    this.ExecuteAtMidnight();
                 }, null, timeToGo, Timeout.InfiniteTimeSpan);
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
@@ -46,11 +46,11 @@ namespace Megatrapp
             
         }
 
-        private void SomeMethodRunsAt0000() {
+        private void ExecuteAtMidnight() {
             // Checks if there are registered clocks
             if (clocksList.Count > 0) {
                 // Send to DB
-                EraseRecords();
+                //EraseRecords();
                 BackUpAttendanceAndEmployees();
             }
         }
@@ -101,11 +101,8 @@ namespace Megatrapp
             try {
                 AttendanceRecordDAO attendanceRecordDAO = new AttendanceRecordDAO();
                 EmployeeDAO employeeDAO = new EmployeeDAO();
-                UnidentifiedEmployeeDAO unidentifiedEmployeeDAO = new UnidentifiedEmployeeDAO();
-                UnidentifiedAttendanceRecordDAO unidentifiedAttendanceRecordDAO = new UnidentifiedAttendanceRecordDAO();
+                string name = "";
                 foreach (AttendanceRecord record in recordList) {
-                    bool wasUnidentified = false;
-                    string name = "";
                     // Iterate through the employees to find the matching internal enrollNumber for each machine
                     // once it finds the match it saves it to the DB and stores some data for later use
                     foreach (Employee employee in employeeList) {
@@ -113,33 +110,18 @@ namespace Megatrapp
                             Console.WriteLine("Ignoring users without name");
                         } else {
                             // If found a match between the employee and attendance record in the device
-                            if (employee.EnrollNumber == record.EnrollNumber) {
-                                // If employee exists skip, else insert it into unidentified employees
-                                // Check in the DB for the employee's information
-                                if (string.IsNullOrEmpty(employeeDAO.GetEmployeeByName(employee.Name).Name)) {
-                                    wasUnidentified = true;
-                                    Console.WriteLine("Add unidentified employee resulted in: " + unidentifiedEmployeeDAO.Add(employee));
-                                } else {
-                                    wasUnidentified = false;
-                                }
+                            if (employee.EmployeeCode == record.EnrollNumber) {
                                 name = employee.Name;
                                 // Remove the employee list so the next iteration runs faster
                                 employeeList.Remove(employee);
-                                // if the employee was NOT identified, get the unidentified id and save it
-                                if (wasUnidentified) {
-                                    Console.WriteLine("Storing UNidentified record");
-                                    Employee unidentifiedEmployee = unidentifiedEmployeeDAO.GetUnidentifiedEmployeeByName(name);
-                                    record.EnrollNumber = unidentifiedEmployee.EnrollNumber;
-                                    unidentifiedAttendanceRecordDAO.Add(record);
-                                } else {
-                                    // if the employee was identified obtain it's id from the actual DB (not the clock machine)
-                                    // and save the attendance record
-                                    Console.WriteLine("Storing identified record");
-                                    Employee identifiedEmployee = employeeDAO.GetEmployeeByName(name);
-                                    record.EnrollNumber = identifiedEmployee.EnrollNumber;
+                                // if the employee was found in the db; save the attendance record
+                                if (employee.FoundInDB) {
+                                    // Need to swap the values here because the enrollNumber will point to the employee's ID in DB
+                                    // and it currently points to the employee's code
+                                    record.EnrollNumber = employee.Id;
                                     attendanceRecordDAO.Add(record);
-                                }
-                                Console.WriteLine("Succesfully stored the attendance record");
+                                    Console.WriteLine("Succesfully stored the attendance record");
+                                }                             
                                 break;
                             }
                         }
@@ -155,6 +137,20 @@ namespace Megatrapp
             FillDataGridEmployees(employeeList);
         }
 
+        private void UpdatEmployeeInformation(List<Employee> rawEmployeeList) {
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+            foreach (Employee employee in rawEmployeeList) {
+                string code = employee.EmployeeCode;
+                Employee employeeInDB = employeeDAO.GetEmployeeByCode(code);
+                if (employeeInDB == null) {
+                    employee.FoundInDB = false;
+                } else {
+                    employee.FoundInDB = true;
+                    employee.Id = employeeInDB.Id;
+                }
+            }
+        }
+
         private void BackUpAttendanceAndEmployees() {
             try {
                 foreach (string clockIP in clocksList) {
@@ -163,13 +159,14 @@ namespace Megatrapp
                         ClearDataGridViewAttendanceRecords();
                         // Device needs to be disabled first
                         zKHelper.SetDeviceState(false);
-                        List<Employee> employees = zKHelper.GetAllUsersInfo();
-                        List<AttendanceRecord> records = zKHelper.DownloadAttendanceData();
-                        RefreshDGVEmployees(employees);
-                        FillDataGridAttendanceRecords(records, employees);
+                        List<Employee> employeeList = zKHelper.GetAllUsersInfo();
+                        List<AttendanceRecord> attendanceRecordList = zKHelper.DownloadAttendanceData();
+                        UpdatEmployeeInformation(employeeList);
+                        RefreshDGVEmployees(employeeList);
+                        FillDataGridAttendanceRecords(attendanceRecordList, employeeList);
                         zKHelper.SetDeviceState(true);
                         zKHelper.Disconnect();
-                        UploadAttendanceRecordsToDatabase(records, employees);
+                        UploadAttendanceRecordsToDatabase(attendanceRecordList, employeeList);
                         // The if is in case the GUI needs to be updated from another thread
                         if (labelStatus.InvokeRequired) {
                             labelStatus.Invoke(new MethodInvoker(() => labelStatus.Text = "Registros descargados"));
@@ -240,21 +237,21 @@ namespace Megatrapp
             foreach (Employee employee in employees) {
                 // The if is in case the GUI needs to be updated from another thread
                 if (dataGridViewUsers.InvokeRequired) {
-                    dataGridViewUsers.Invoke(new MethodInvoker(() => dataGridViewUsers.Rows.Add(employee.EnrollNumber, employee.Name, employee.Privilege, employee.Password, employee.MachineNumber)));
+                    dataGridViewUsers.Invoke(new MethodInvoker(() => dataGridViewUsers.Rows.Add(employee.EmployeeCode, employee.Name, employee.Privilege, employee.Password, employee.MachineNumber, employee.FoundInDB)));
                 } else {
-                    dataGridViewUsers.Rows.Add(employee.EnrollNumber, employee.Name, employee.Privilege, employee.Password, employee.MachineNumber);
+                    dataGridViewUsers.Rows.Add(employee.EmployeeCode, employee.Name, employee.Privilege, employee.Password, employee.MachineNumber, employee.FoundInDB);
                 }
             }
         }
 
         private void FillDataGridAttendanceRecords(List<AttendanceRecord> records, List<Employee> employees) {
             foreach (AttendanceRecord record in records) {
-                Employee employee = employees.Find(employeeX => employeeX.EnrollNumber == record.EnrollNumber);
+                Employee employee = employees.Find(employeeX => employeeX.EmployeeCode == record.EnrollNumber);
                 // The if is in case the GUI needs to be updated from another thread
                 if (dataGridViewAttendanceRecords.InvokeRequired) {
-                    dataGridViewAttendanceRecords.Invoke(new MethodInvoker(() => dataGridViewAttendanceRecords.Rows.Add(employee.EnrollNumber, employee.Name, record.dateTime)));
+                    dataGridViewAttendanceRecords.Invoke(new MethodInvoker(() => dataGridViewAttendanceRecords.Rows.Add(employee.EmployeeCode, employee.Name, record.dateTime)));
                 } else {
-                    dataGridViewAttendanceRecords.Rows.Add(employee.EnrollNumber, employee.Name, record.dateTime);
+                    dataGridViewAttendanceRecords.Rows.Add(employee.EmployeeCode, employee.Name, record.dateTime);
                 }
             }
         }

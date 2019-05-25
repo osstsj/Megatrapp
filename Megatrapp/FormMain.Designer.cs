@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuMainWindow = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +61,7 @@
             this.privilegeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.passwordColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.foundInDBColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -197,6 +199,8 @@
             // 
             this.dataGridViewUsers.AllowUserToAddRows = false;
             this.dataGridViewUsers.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.PowderBlue;
+            this.dataGridViewUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewUsers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewUsers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -204,7 +208,8 @@
             this.nameColumn,
             this.privilegeColumn,
             this.passwordColumn,
-            this.machineNumberColumn});
+            this.machineNumberColumn,
+            this.foundInDBColumn});
             this.dataGridViewUsers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewUsers.Location = new System.Drawing.Point(4, 5);
             this.dataGridViewUsers.Name = "dataGridViewUsers";
@@ -376,12 +381,14 @@
             // 
             // privilegeColumn
             // 
+            this.privilegeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.privilegeColumn.HeaderText = "Privilegio";
             this.privilegeColumn.Name = "privilegeColumn";
             this.privilegeColumn.ReadOnly = true;
             // 
             // passwordColumn
             // 
+            this.passwordColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.passwordColumn.HeaderText = "Password";
             this.passwordColumn.Name = "passwordColumn";
             this.passwordColumn.ReadOnly = true;
@@ -391,6 +398,12 @@
             this.machineNumberColumn.HeaderText = "Numero de Maquina";
             this.machineNumberColumn.Name = "machineNumberColumn";
             this.machineNumberColumn.ReadOnly = true;
+            // 
+            // foundInDBColumn
+            // 
+            this.foundInDBColumn.HeaderText = "Encontrado en la Base de datos";
+            this.foundInDBColumn.Name = "foundInDBColumn";
+            this.foundInDBColumn.ReadOnly = true;
             // 
             // frmMain
             // 
@@ -462,6 +475,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn privilegeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn passwordColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn machineNumberColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn foundInDBColumn;
     }
 }
 

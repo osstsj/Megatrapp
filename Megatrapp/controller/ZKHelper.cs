@@ -94,7 +94,7 @@ namespace Megatrapp.controller {
 
         public bool UpdateUserInfo(Employee employee) {
             try {
-                bool result = serviceController.SSR_SetUserInfo(machineNumber, employee.EnrollNumber, employee.Name, employee.Password, employee.Privilege, true);
+                bool result = serviceController.SSR_SetUserInfo(machineNumber, employee.EmployeeCode, employee.Name, employee.Password, employee.Privilege, true);
                 serviceController.RefreshData(machineNumber);
                 return result;
             } catch (Exception ex) {

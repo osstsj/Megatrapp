@@ -16,7 +16,7 @@ namespace Megatrapp.dao {
         const string INSERT_QUERY = "INSERT INTO main_employee(full_name) VALUES(@name)";
         const string SELECT_ALL_QUERY = "SELECT * FROM public.main_employee;";
         const string SELECT_QUERY_BY_NAME = "SELECT * FROM public.main_employee WHERE full_employee_name = @name;";
-        const string SELECT_QUERY_BY_ID = "SELECT * FROM public.main_employee WHERE id = @id;";
+        const string SELECT_QUERY_BY_ID = "SELECT * FROM public.main_employee WHERE code = @code;";
 
         public int Add(Employee entity) {
             try {
@@ -54,22 +54,24 @@ namespace Megatrapp.dao {
             throw new NotImplementedException();
         }
 
-        public Employee GetEmployeeByID(int id) {
-            Employee employee = new Employee();
+        public Employee GetEmployeeByCode(string code) {
             string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
                 using (var cmd = new NpgsqlCommand(SELECT_QUERY_BY_ID, connection)) {
                     connection.Open();
-                    cmd.Parameters.AddWithValue("id", NpgsqlDbType.Integer, id);
+                    cmd.Parameters.AddWithValue("code", NpgsqlDbType.Varchar, code);
                     cmd.Prepare();
                     NpgsqlDataReader reader = cmd.ExecuteReader();
+                    Employee employee = new Employee();
                     while (reader.Read()) {
                         employee.Name = reader["full_name"].ToString();
-                        employee.EnrollNumber = reader["id"].ToString();
+                        employee.EmployeeCode = reader["code"].ToString();
+                        employee.Id = reader["id"].ToString();
+                        return employee;
                     }
                 }
             }
-            return employee;
+            return null;
         }
 
         public Employee GetEmployeeByName(string name) {
@@ -83,7 +85,7 @@ namespace Megatrapp.dao {
                     NpgsqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read()) {
                         employee.Name = reader["full_name"].ToString();
-                        employee.EnrollNumber = reader["id"].ToString();
+                        employee.EmployeeCode = reader["code"].ToString();
                     }
                 }
             }

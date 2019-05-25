@@ -40,11 +40,6 @@
             this.buttonRun = new System.Windows.Forms.Button();
             this.tabUsers = new System.Windows.Forms.TabPage();
             this.dataGridViewUsers = new System.Windows.Forms.DataGridView();
-            this.enrollNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.privilegeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.passwordColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClocks = new System.Windows.Forms.TabPage();
             this.splitContainerClocks = new System.Windows.Forms.SplitContainer();
             this.textBoxNewClockIP = new System.Windows.Forms.TextBox();
@@ -60,6 +55,11 @@
             this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerApp = new System.Windows.Forms.Timer(this.components);
             this.errorProviderClocksIP = new System.Windows.Forms.ErrorProvider(this.components);
+            this.enrollNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.privilegeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.passwordColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -213,34 +213,6 @@
             this.dataGridViewUsers.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewUsers_CellBeginEdit);
             this.dataGridViewUsers.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewUsers_CellEndEdit);
             // 
-            // enrollNumber
-            // 
-            this.enrollNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.enrollNumber.HeaderText = "ID";
-            this.enrollNumber.Name = "enrollNumber";
-            this.enrollNumber.ReadOnly = true;
-            // 
-            // nameColumn
-            // 
-            this.nameColumn.HeaderText = "Nombre";
-            this.nameColumn.Name = "nameColumn";
-            // 
-            // privilegeColumn
-            // 
-            this.privilegeColumn.HeaderText = "Privilegio";
-            this.privilegeColumn.Name = "privilegeColumn";
-            // 
-            // passwordColumn
-            // 
-            this.passwordColumn.HeaderText = "Password";
-            this.passwordColumn.Name = "passwordColumn";
-            // 
-            // machineNumberColumn
-            // 
-            this.machineNumberColumn.HeaderText = "Numero de Maquina";
-            this.machineNumberColumn.Name = "machineNumberColumn";
-            this.machineNumberColumn.ReadOnly = true;
-            // 
             // tabClocks
             // 
             this.tabClocks.Controls.Add(this.splitContainerClocks);
@@ -389,6 +361,36 @@
             // errorProviderClocksIP
             // 
             this.errorProviderClocksIP.ContainerControl = this;
+            // 
+            // enrollNumber
+            // 
+            this.enrollNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.enrollNumber.HeaderText = "ID";
+            this.enrollNumber.Name = "enrollNumber";
+            this.enrollNumber.ReadOnly = true;
+            // 
+            // nameColumn
+            // 
+            this.nameColumn.HeaderText = "Nombre";
+            this.nameColumn.Name = "nameColumn";
+            // 
+            // privilegeColumn
+            // 
+            this.privilegeColumn.HeaderText = "Privilegio";
+            this.privilegeColumn.Name = "privilegeColumn";
+            this.privilegeColumn.ReadOnly = true;
+            // 
+            // passwordColumn
+            // 
+            this.passwordColumn.HeaderText = "Password";
+            this.passwordColumn.Name = "passwordColumn";
+            this.passwordColumn.ReadOnly = true;
+            // 
+            // machineNumberColumn
+            // 
+            this.machineNumberColumn.HeaderText = "Numero de Maquina";
+            this.machineNumberColumn.Name = "machineNumberColumn";
+            this.machineNumberColumn.ReadOnly = true;
             // 
             // frmMain
             // 

@@ -24,7 +24,7 @@ namespace Megatrapp
 
         private System.Threading.Timer timer;
         private List<string> clocksList;
-        private Employee modifiedEmployee;
+        private string originalEmployeeName;
 
         public frmMain() {
             InitializeComponent();
@@ -102,9 +102,7 @@ namespace Megatrapp
                 EmployeeDAO employeeDAO = new EmployeeDAO();
                 UnidentifiedEmployeeDAO unidentifiedEmployeeDAO = new UnidentifiedEmployeeDAO();
                 UnidentifiedAttendanceRecordDAO unidentifiedAttendanceRecordDAO = new UnidentifiedAttendanceRecordDAO();
-                Console.WriteLine("Iterating through the record list");
                 foreach (AttendanceRecord record in recordList) {
-                    Console.WriteLine("####################################################");
                     bool wasUnidentified = false;
                     string name = "";
                     // Iterate through the employees to find the matching internal enrollNumber for each machine
@@ -157,16 +155,11 @@ namespace Megatrapp
 
         private void BackUpAttendanceAndEmployees() {
             try {
-                foreach (var clockIP in clocksList) {
+                foreach (string clockIP in clocksList) {
                     ZKHelper zKHelper = new ZKHelper();
                     if (zKHelper.ConnectTCP(clockIP, dataGridViewAttendanceRecords) == 1) {
                         ClearDataGridViewAttendanceRecords();
-                        // The if is in case the GUI needs to be updated from another thread
-                        if (labelStatus.InvokeRequired) {
-                            labelStatus.Invoke(new MethodInvoker(() => labelStatus.Text = "Registros descargados"));
-                        } else {
-                            labelStatus.Text = "Registros descargados";
-                        }
+                        // Device needs to be disabled first
                         zKHelper.SetDeviceState(false);
                         List<Employee> employees = zKHelper.GetAllUsersInfo();
                         List<AttendanceRecord> records = zKHelper.DownloadAttendanceData();
@@ -174,7 +167,15 @@ namespace Megatrapp
                         FillDataGridAttendanceRecords(records, employees);
                         zKHelper.SetDeviceState(true);
                         zKHelper.Disconnect();
-                        UploadAttendanceRecordsToDatabase(records, employees);
+                        //UploadAttendanceRecordsToDatabase(records, employees);
+                        // The if is in case the GUI needs to be updated from another thread
+                        if (labelStatus.InvokeRequired) {
+                            labelStatus.Invoke(new MethodInvoker(() => labelStatus.Text = "Registros descargados"));
+                        } else {
+                            labelStatus.Text = "Registros descargados";
+                        }
+                    } else {
+                        MessageBox.Show("No hubo conexion con el dispositivo " + clockIP);
                     }
                 }
             } catch (Exception ex) {
@@ -199,7 +200,7 @@ namespace Megatrapp
             }   
         }
 
-        private void UpdateUserInfoInAllClocks() {
+        private void UpdateUserInfoInAllClocks(Employee modifiedEmployee) {
             try {
                 foreach (var clockIP in clocksList) {
                     ZKHelper zKHelper = new ZKHelper();
@@ -378,26 +379,27 @@ namespace Megatrapp
         }
 
         private void dataGridViewUsers_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
-            var senderGrid = (DataGridView)sender;
+            DataGridView senderGrid = (DataGridView)sender;
             string employeeId = senderGrid["enrollNumber", e.RowIndex].Value.ToString();
-            int.TryParse(senderGrid["machineNumberColumn", e.RowIndex].Value.ToString(), out int machineNumber);
-            string employeeName = senderGrid["nameColumn", e.RowIndex].Value.ToString();
-            string password = senderGrid["passwordColumn", e.RowIndex].Value.ToString();
-            int.TryParse(senderGrid["privilegeColumn", e.RowIndex].Value.ToString(), out int privilege);
-            modifiedEmployee = new Employee(employeeId, machineNumber, employeeName, password, privilege);
-            UpdateUserInfoInAllClocks();
+            string alertText = "Desear modificar el usuario " + employeeId + "?";
+            DialogResult result = MessageBox.Show(alertText, "Modificacion", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+            if (result == DialogResult.OK) {
+                int.TryParse(senderGrid["machineNumberColumn", e.RowIndex].Value.ToString(), out int machineNumber);
+                string employeeName = senderGrid["nameColumn", e.RowIndex].Value.ToString().ToUpper();
+                string password = senderGrid["passwordColumn", e.RowIndex].Value.ToString();
+                int.TryParse(senderGrid["privilegeColumn", e.RowIndex].Value.ToString(), out int privilege);
+                Employee modifiedEmployee = new Employee(employeeId, machineNumber, employeeName, password, privilege);
+                UpdateUserInfoInAllClocks(modifiedEmployee);
+                senderGrid["nameColumn", e.RowIndex].Value = senderGrid["nameColumn", e.RowIndex].Value.ToString().ToUpper();
+            } else {
+                senderGrid.CancelEdit();
+                senderGrid["nameColumn", e.RowIndex].Value = originalEmployeeName;
+            }
         }
 
         private void dataGridViewUsers_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e) {
-            var senderGrid = (DataGridView)sender;
-            string employeeId = senderGrid["enrollNumber", e.RowIndex].Value.ToString();
-            int.TryParse(senderGrid["machineNumberColumn", e.RowIndex].Value.ToString(), out int machineNumber);
-            string employeeName = senderGrid["nameColumn", e.RowIndex].Value.ToString();
-            string password = senderGrid["passwordColumn", e.RowIndex].Value.ToString();
-            int.TryParse(senderGrid["privilegeColumn", e.RowIndex].Value.ToString(), out int privilege);
-            if (privilege < 0 || privilege > 3) {
-                MessageBox.Show("Los valores de privilegio deben ser entre 0(usuario) y 3(superadmin)");
-            }
+            DataGridView senderGrid = (DataGridView)sender;
+            originalEmployeeName = senderGrid["nameColumn", e.RowIndex].Value.ToString();
         }
     }
 }

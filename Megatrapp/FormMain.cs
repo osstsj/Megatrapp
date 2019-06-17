@@ -113,7 +113,7 @@ namespace Megatrapp
                             if (employee.EmployeeCode == record.EnrollNumber) {
                                 name = employee.Name;
                                 // Remove the employee list so the next iteration runs faster
-                                employeeList.Remove(employee);
+                                //employeeList.Remove(employee);
                                 // if the employee was found in the db; save the attendance record
                                 if (employee.FoundInDB) {
                                     // Need to swap the values here because the enrollNumber will point to the employee's ID in DB

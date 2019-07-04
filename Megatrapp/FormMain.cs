@@ -52,6 +52,8 @@ namespace Megatrapp
                 // Send to DB
                 //EraseRecords();
                 BackUpAttendanceAndEmployees();
+                DatabaseHelper helper = new DatabaseHelper();
+                helper.CreateIncidences();
             }
         }
 
@@ -374,6 +376,7 @@ namespace Megatrapp
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
                 senderGrid.Rows.RemoveAt(e.RowIndex);
                 GenerateXMLFromDataGridViewClocks();
+                GetClocksFromXMLFile();
             }
         }
 
@@ -410,8 +413,27 @@ namespace Megatrapp
         }
 
         private void button1_Click(object sender, EventArgs e) {
-            DatabaseHelper helper = new DatabaseHelper();
-            helper.CreateIncidences();
+            
+        }
+
+        private void buttonCreatePayroll_Click(object sender, EventArgs e) {
+            try {
+                DateTime dateStart = dateTimePickerStart.Value;
+                DateTime dateEnd = dateTimePickerEnd.Value;
+                PayrollDAO payrollDAO = new PayrollDAO();
+                
+                if (dateStart == dateEnd) {
+                    MessageBox.Show("Las fechas no pueden ser las mismas");
+                } else if (dateStart > dateEnd) {
+                    MessageBox.Show("La fecha de inicio no puede ser mayor a la final");
+                } else {
+                    Payroll payroll = new Payroll(dateStart, dateEnd);
+                    payrollDAO.Add(payroll);
+                    MessageBox.Show("Se ha creado el periodo de nomina");
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

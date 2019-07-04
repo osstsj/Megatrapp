@@ -10,21 +10,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Megatrapp.dao {
-    class IncidenceDAO : IRepository<Incidence> {
+    class PayrollDAO : IRepository<Payroll> {
 
-        //const string INSERT_QUERY = "INSERT INTO main_employee(full_name) VALUES(@name)";
-        const string INSERT_QUERY = "INSERT INTO main_incidence(date, employee_id, incidence_type_id) VALUES(@date, @employeeId, @incidenceTypeId);";
-        
+        const string INSERT_QUERY = "INSERT INTO main_payroll(start_date, end_date) VALUES(@startDate, @endDate);";
+        const string GET_CURRENT_PAYROLL = "SELECT get_current_payroll();";
 
-        public int Add(Incidence entity) {
+        public int Add(Payroll entity) {
             try {
                 string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
                 using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
                     using (var cmd = new NpgsqlCommand(INSERT_QUERY, connection)) {
                         connection.Open();
-                        cmd.Parameters.AddWithValue("date", NpgsqlDbType.Date, entity.Date);
-                        cmd.Parameters.AddWithValue("employeeId", NpgsqlDbType.Integer, entity.EmployeeID);
-                        cmd.Parameters.AddWithValue("incidenceTypeId", NpgsqlDbType.Integer, entity.IncidenceTypeId);
+                        cmd.Parameters.AddWithValue("startDate", NpgsqlDbType.Date, entity.StartDate);
+                        cmd.Parameters.AddWithValue("endDate", NpgsqlDbType.Date, entity.EndDate);
                         cmd.Prepare();
                         return cmd.ExecuteNonQuery();
                     }
@@ -42,39 +40,40 @@ namespace Megatrapp.dao {
             return -1;
         }
 
-        public int Delete(Incidence entity) {
+        public int Delete(Payroll entity) {
             throw new NotImplementedException();
         }
 
-        public int Get(Incidence entity) {
+        public int Get(Payroll entity) {
             throw new NotImplementedException();
         }
 
-        public int Get(string query) {
+        public int GetCurrentPayroll() {
             string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
+            int id = 0;
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
-                using (var cmd = new NpgsqlCommand(query, connection)) {
+                using (var cmd = new NpgsqlCommand(GET_CURRENT_PAYROLL, connection)) {
                     connection.Open();
                     cmd.Prepare();
                     NpgsqlDataReader reader = cmd.ExecuteReader();
-                    List<AttendanceRecord> records = new List<AttendanceRecord>();
                     while (reader.Read()) {
-                        var idEmployee = reader["employee_id"].ToString();
-                        var register = DateTime.Parse(reader["register"].ToString());
-                        records.Add(new AttendanceRecord(idEmployee, register));
+                        int.TryParse(reader["get_current_payroll"].ToString(), out id);
                     }
                     connection.Close();
-                    return records.Count();
+                    return id;
                 }
-
             }
         }
 
-        public List<Incidence> GetAll() {
+        public int Get(string query) {
             throw new NotImplementedException();
         }
 
-        public int Update(Incidence entity) {
+        public List<Payroll> GetAll() {
+            throw new NotImplementedException();
+        }
+
+        public int Update(Payroll entity) {
             throw new NotImplementedException();
         }
     }

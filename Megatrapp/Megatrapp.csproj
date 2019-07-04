@@ -74,7 +74,9 @@
     <Compile Include="controller\DatabaseHelper.cs" />
     <Compile Include="controller\ZKHelper.cs" />
     <Compile Include="dao\EmployeeDAO.cs" />
+    <Compile Include="dao\HoursDeductedDAO.cs" />
     <Compile Include="dao\IncidenceDAO.cs" />
+    <Compile Include="dao\PayrollDAO.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,7 +87,9 @@
     <Compile Include="model\AttendanceRecord.cs" />
     <Compile Include="model\Employee.cs" />
     <Compile Include="helper\EnumHelper.cs" />
+    <Compile Include="model\HoursDeducted.cs" />
     <Compile Include="model\Incidence.cs" />
+    <Compile Include="model\Payroll.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormMain.resx">

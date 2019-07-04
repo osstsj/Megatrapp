@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuMainWindow = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +63,12 @@
             this.timerApp = new System.Windows.Forms.Timer(this.components);
             this.errorProviderClocksIP = new System.Windows.Forms.ErrorProvider(this.components);
             this.button1 = new System.Windows.Forms.Button();
+            this.tabPayroll = new System.Windows.Forms.TabPage();
+            this.buttonCreatePayroll = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -78,6 +84,7 @@
             this.tabAttendanceRecords.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendanceRecords)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProviderClocksIP)).BeginInit();
+            this.tabPayroll.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuMainWindow
@@ -110,6 +117,7 @@
             this.tabControlMainWindow.Controls.Add(this.tabUsers);
             this.tabControlMainWindow.Controls.Add(this.tabClocks);
             this.tabControlMainWindow.Controls.Add(this.tabAttendanceRecords);
+            this.tabControlMainWindow.Controls.Add(this.tabPayroll);
             this.tabControlMainWindow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMainWindow.Location = new System.Drawing.Point(0, 27);
             this.tabControlMainWindow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -201,8 +209,8 @@
             // 
             this.dataGridViewUsers.AllowUserToAddRows = false;
             this.dataGridViewUsers.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.PowderBlue;
-            this.dataGridViewUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.PowderBlue;
+            this.dataGridViewUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewUsers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewUsers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -420,6 +428,63 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // tabPayroll
+            // 
+            this.tabPayroll.Controls.Add(this.label2);
+            this.tabPayroll.Controls.Add(this.dateTimePickerEnd);
+            this.tabPayroll.Controls.Add(this.dateTimePickerStart);
+            this.tabPayroll.Controls.Add(this.label1);
+            this.tabPayroll.Controls.Add(this.buttonCreatePayroll);
+            this.tabPayroll.Location = new System.Drawing.Point(4, 30);
+            this.tabPayroll.Name = "tabPayroll";
+            this.tabPayroll.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPayroll.Size = new System.Drawing.Size(802, 329);
+            this.tabPayroll.TabIndex = 4;
+            this.tabPayroll.Text = "Nominas";
+            this.tabPayroll.UseVisualStyleBackColor = true;
+            // 
+            // buttonCreatePayroll
+            // 
+            this.buttonCreatePayroll.Location = new System.Drawing.Point(339, 115);
+            this.buttonCreatePayroll.Name = "buttonCreatePayroll";
+            this.buttonCreatePayroll.Size = new System.Drawing.Size(85, 37);
+            this.buttonCreatePayroll.TabIndex = 0;
+            this.buttonCreatePayroll.Text = "Crear";
+            this.buttonCreatePayroll.UseVisualStyleBackColor = true;
+            this.buttonCreatePayroll.Click += new System.EventHandler(this.buttonCreatePayroll_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(237, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 21);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Desde";
+            // 
+            // dateTimePickerStart
+            // 
+            this.dateTimePickerStart.Location = new System.Drawing.Point(164, 47);
+            this.dateTimePickerStart.Name = "dateTimePickerStart";
+            this.dateTimePickerStart.Size = new System.Drawing.Size(200, 29);
+            this.dateTimePickerStart.TabIndex = 2;
+            // 
+            // dateTimePickerEnd
+            // 
+            this.dateTimePickerEnd.Location = new System.Drawing.Point(389, 47);
+            this.dateTimePickerEnd.Name = "dateTimePickerEnd";
+            this.dateTimePickerEnd.Size = new System.Drawing.Size(200, 29);
+            this.dateTimePickerEnd.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(467, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 21);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Hasta";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
@@ -452,6 +517,8 @@
             this.tabAttendanceRecords.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendanceRecords)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProviderClocksIP)).EndInit();
+            this.tabPayroll.ResumeLayout(false);
+            this.tabPayroll.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -492,6 +559,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn machineNumberColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn foundInDBColumn;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TabPage tabPayroll;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEnd;
+        private System.Windows.Forms.DateTimePicker dateTimePickerStart;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button buttonCreatePayroll;
     }
 }
 

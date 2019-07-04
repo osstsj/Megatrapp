@@ -18,6 +18,17 @@ namespace Megatrapp.model {
         public Employee() {
         }
 
+        public Employee(string id, string fullname) {
+            this.Id = id;
+            this.Name = fullname;
+        }
+
+        public Employee(string id, string fullname, string employeeCode) {
+            this.Id = id;
+            this.Name = fullname;
+            this.EmployeeCode = employeeCode;
+        }
+
         public Employee(string id, string employeeCode, int machineNumber, string name, string password, int privilege, bool foundInDB) : this(id) {
             EmployeeCode = employeeCode;
             MachineNumber = machineNumber;

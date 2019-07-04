@@ -110,7 +110,7 @@ namespace Megatrapp
                             Console.WriteLine("Ignoring users without name");
                         } else {
                             // If found a match between the employee and attendance record in the device
-                            if (employee.EmployeeCode == record.EnrollNumber) {
+                            if (employee.EmployeeCode == record.EmployeeId) {
                                 name = employee.Name;
                                 // Remove the employee list so the next iteration runs faster
                                 //employeeList.Remove(employee);
@@ -118,7 +118,7 @@ namespace Megatrapp
                                 if (employee.FoundInDB) {
                                     // Need to swap the values here because the enrollNumber will point to the employee's ID in DB
                                     // and it currently points to the employee's code
-                                    record.EnrollNumber = employee.Id;
+                                    record.EmployeeId = employee.Id;
                                     attendanceRecordDAO.Add(record);
                                     Console.WriteLine("Succesfully stored the attendance record");
                                 }                             
@@ -148,6 +148,14 @@ namespace Megatrapp
                     employee.FoundInDB = true;
                     employee.Id = employeeInDB.Id;
                 }
+            }
+        }
+
+        private void CreateIncidences() {
+            try {
+
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -246,7 +254,7 @@ namespace Megatrapp
 
         private void FillDataGridAttendanceRecords(List<AttendanceRecord> records, List<Employee> employees) {
             foreach (AttendanceRecord record in records) {
-                Employee employee = employees.Find(employeeX => employeeX.EmployeeCode == record.EnrollNumber);
+                Employee employee = employees.Find(employeeX => employeeX.EmployeeCode == record.EmployeeId);
                 // The if is in case the GUI needs to be updated from another thread
                 if (dataGridViewAttendanceRecords.InvokeRequired) {
                     dataGridViewAttendanceRecords.Invoke(new MethodInvoker(() => dataGridViewAttendanceRecords.Rows.Add(employee.EmployeeCode, employee.Name, record.dateTime)));
@@ -399,6 +407,11 @@ namespace Megatrapp
         private void dataGridViewUsers_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e) {
             DataGridView senderGrid = (DataGridView)sender;
             originalEmployeeName = senderGrid["nameColumn", e.RowIndex].Value.ToString();
+        }
+
+        private void button1_Click(object sender, EventArgs e) {
+            DatabaseHelper helper = new DatabaseHelper();
+            helper.CreateIncidences();
         }
     }
 }

@@ -17,10 +17,11 @@ namespace Megatrapp.dao {
         // INSERT INTO main_employeeaccount(username, email, "password", "passwordSalt", "passwordHashAlgorithm", "passwordReminderToken", "passwordReminderExpiration") VALUES ('eduardoalbertorg', 'passw0rd', 'passw0rd', 'passw0rd', 'passw0rd', 'passw0rd', CURRENT_TIMESTAMP);
         string INSERT_QUERY = "INSERT INTO main_attendancerecord(attendance_record, employee_id) VALUES(@time, @employee_id)";
         string SELECT_ALL_QUERY = "SELECT * FROM public.main_employeeaccount";
+        const string GET_RECORDS_FROM_YESTERDAY = "select * from main_attendancerecord where DATE(main_attendancerecord.attendance_record) = (CURRENT_DATE-1) AND main_attendancerecord.employee_id = @id;";
 
         public int Add(AttendanceRecord entity) {
             string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
-            int.TryParse(entity.EnrollNumber, out int enrollNumber);
+            int.TryParse(entity.EmployeeId, out int enrollNumber);
             Console.WriteLine("Checking if there are no duplicate attendance records...");
             if (Get(entity) == 0) {
                 Console.WriteLine("Preparing to add a new row into main_attendancerecord");
@@ -54,8 +55,8 @@ namespace Megatrapp.dao {
                     List<AttendanceRecord> records = new List<AttendanceRecord>();
                     while (reader.Read()) {
                         var idEmployee = reader["employee_id"].ToString();
-                        var register = DateTime.Parse(reader["attendance_record"].ToString());
-                        records.Add(new AttendanceRecord(idEmployee, register));
+                        var attendanceRecord = DateTime.Parse(reader["attendance_record"].ToString());
+                        records.Add(new AttendanceRecord(idEmployee, attendanceRecord));
                     }
                     connection.Close();
                     return records;
@@ -74,16 +75,37 @@ namespace Megatrapp.dao {
             using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
                 using (var cmd = new NpgsqlCommand(checkDuplicateQuery, connection)) {
                     connection.Open();
-                    int.TryParse(entity.EnrollNumber, out int enrollNumber);
+                    int.TryParse(entity.EmployeeId, out int id);
                     cmd.Parameters.AddWithValue("time", NpgsqlDbType.Timestamp, entity.dateTime);
-                    cmd.Parameters.AddWithValue("id", NpgsqlDbType.Integer, enrollNumber);
+                    cmd.Parameters.AddWithValue("id", NpgsqlDbType.Integer, id);
                     cmd.Prepare();
                     NpgsqlDataReader reader = cmd.ExecuteReader();
                     List<AttendanceRecord> records = new List<AttendanceRecord>();
                     while (reader.Read()) {
                         var idEmployee = reader["employee_id"].ToString();
-                        var register = DateTime.Parse(reader["attendance_record"].ToString());
-                        records.Add(new AttendanceRecord(idEmployee, register));
+                        var attendanceRecord = DateTime.Parse(reader["attendance_record"].ToString());
+                        records.Add(new AttendanceRecord(idEmployee, attendanceRecord));
+                    }
+                    connection.Close();
+                    return records.Count();
+                }
+            }
+        }
+
+        public int GetAttendanceRecordsFromYesterday(Employee entity) {
+            string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
+                using (var cmd = new NpgsqlCommand(GET_RECORDS_FROM_YESTERDAY, connection)) {
+                    connection.Open();
+                    int.TryParse(entity.Id, out int id);
+                    cmd.Parameters.AddWithValue("id", NpgsqlDbType.Integer, id);
+                    cmd.Prepare();
+                    NpgsqlDataReader reader = cmd.ExecuteReader();
+                    List<AttendanceRecord> records = new List<AttendanceRecord>();
+                    while (reader.Read()) {
+                        var idEmployee = reader["employee_id"].ToString();
+                        var attendanceRecord = DateTime.Parse(reader["attendance_record"].ToString());
+                        records.Add(new AttendanceRecord(idEmployee, attendanceRecord));
                     }
                     connection.Close();
                     return records.Count();
@@ -101,8 +123,8 @@ namespace Megatrapp.dao {
                     List<AttendanceRecord> records = new List<AttendanceRecord>();
                     while (reader.Read()) {
                         var idEmployee = reader["employee_id"].ToString();
-                        var register = DateTime.Parse(reader["register"].ToString());
-                        records.Add(new AttendanceRecord(idEmployee, register));
+                        var attendanceRecord = DateTime.Parse(reader["attendance_record"].ToString());
+                        records.Add(new AttendanceRecord(idEmployee, attendanceRecord));
                     }
                     connection.Close();
                     return records.Count();

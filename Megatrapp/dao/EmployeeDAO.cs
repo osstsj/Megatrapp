@@ -15,7 +15,7 @@ namespace Megatrapp.dao {
         // DB queries
         const string INSERT_QUERY = "INSERT INTO main_employee(full_name) VALUES(@name)";
         const string SELECT_ALL_QUERY = "SELECT * FROM public.main_employee;";
-        const string SELECT_QUERY_BY_NAME = "SELECT * FROM public.main_employee WHERE full_employee_name = @name;";
+        const string SELECT_QUERY_BY_NAME = "SELECT * FROM public.main_employee WHERE full_name = @name;";
         const string SELECT_QUERY_BY_ID = "SELECT * FROM public.main_employee WHERE code = @code;";
 
         public int Add(Employee entity) {
@@ -43,7 +43,23 @@ namespace Megatrapp.dao {
         }
 
         public List<Employee> GetAll() {
-            throw new NotImplementedException();
+            string connectionString = ConfigurationManager.ConnectionStrings["PostgreSQL"].ToString();
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString)) {
+                using (var cmd = new NpgsqlCommand(SELECT_ALL_QUERY, connection)) {
+                    connection.Open();
+                    cmd.Prepare();
+                    NpgsqlDataReader reader = cmd.ExecuteReader();
+                    List<Employee> employeeList = new List<Employee>();
+                    while (reader.Read()) {
+                        var idEmployee = reader["id"].ToString();
+                        var fullname = reader["full_name"].ToString();
+                        var code = reader["code"].ToString();
+                        employeeList.Add(new Employee(idEmployee, fullname, code));
+                    }
+                    connection.Close();
+                    return employeeList;
+                }
+            }
         }
 
         public int Delete(Employee entity) {

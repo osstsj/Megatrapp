@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Megatrapp.model {
     class AttendanceRecord {
-        public string EnrollNumber { get; set; }
+        public string EmployeeId { get; set; }
         /*
         public int MachineNumber { get; set; }
         public int VerifyMode { get; set; }
@@ -16,7 +16,7 @@ namespace Megatrapp.model {
         public DateTime dateTime { get; set; }
 
         public AttendanceRecord(string enrollNumber, DateTime dateTime) {
-            EnrollNumber = enrollNumber;
+            EmployeeId = enrollNumber;
             this.dateTime = dateTime;
         }
 

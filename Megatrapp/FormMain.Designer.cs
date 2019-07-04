@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuMainWindow = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,6 +41,12 @@
             this.buttonRun = new System.Windows.Forms.Button();
             this.tabUsers = new System.Windows.Forms.TabPage();
             this.dataGridViewUsers = new System.Windows.Forms.DataGridView();
+            this.enrollNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.privilegeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.passwordColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.foundInDBColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabClocks = new System.Windows.Forms.TabPage();
             this.splitContainerClocks = new System.Windows.Forms.SplitContainer();
             this.textBoxNewClockIP = new System.Windows.Forms.TextBox();
@@ -56,12 +62,7 @@
             this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerApp = new System.Windows.Forms.Timer(this.components);
             this.errorProviderClocksIP = new System.Windows.Forms.ErrorProvider(this.components);
-            this.enrollNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.privilegeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.passwordColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.machineNumberColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.foundInDBColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -135,6 +136,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.Controls.Add(this.button1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.buttonEraseAttendanceRecords, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.labelStatus, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonRun, 1, 1);
@@ -175,7 +177,7 @@
             this.buttonRun.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRun.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonRun.Location = new System.Drawing.Point(311, 222);
+            this.buttonRun.Location = new System.Drawing.Point(576, 222);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(169, 33);
             this.buttonRun.TabIndex = 1;
@@ -199,8 +201,8 @@
             // 
             this.dataGridViewUsers.AllowUserToAddRows = false;
             this.dataGridViewUsers.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.PowderBlue;
-            this.dataGridViewUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.PowderBlue;
+            this.dataGridViewUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewUsers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewUsers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -217,6 +219,44 @@
             this.dataGridViewUsers.TabIndex = 0;
             this.dataGridViewUsers.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewUsers_CellBeginEdit);
             this.dataGridViewUsers.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewUsers_CellEndEdit);
+            // 
+            // enrollNumber
+            // 
+            this.enrollNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.enrollNumber.HeaderText = "ID";
+            this.enrollNumber.Name = "enrollNumber";
+            this.enrollNumber.ReadOnly = true;
+            // 
+            // nameColumn
+            // 
+            this.nameColumn.HeaderText = "Nombre";
+            this.nameColumn.Name = "nameColumn";
+            // 
+            // privilegeColumn
+            // 
+            this.privilegeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.privilegeColumn.HeaderText = "Privilegio";
+            this.privilegeColumn.Name = "privilegeColumn";
+            this.privilegeColumn.ReadOnly = true;
+            // 
+            // passwordColumn
+            // 
+            this.passwordColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.passwordColumn.HeaderText = "Password";
+            this.passwordColumn.Name = "passwordColumn";
+            this.passwordColumn.ReadOnly = true;
+            // 
+            // machineNumberColumn
+            // 
+            this.machineNumberColumn.HeaderText = "Numero de Maquina";
+            this.machineNumberColumn.Name = "machineNumberColumn";
+            this.machineNumberColumn.ReadOnly = true;
+            // 
+            // foundInDBColumn
+            // 
+            this.foundInDBColumn.HeaderText = "Encontrado en la Base de datos";
+            this.foundInDBColumn.Name = "foundInDBColumn";
+            this.foundInDBColumn.ReadOnly = true;
             // 
             // tabClocks
             // 
@@ -367,43 +407,18 @@
             // 
             this.errorProviderClocksIP.ContainerControl = this;
             // 
-            // enrollNumber
+            // button1
             // 
-            this.enrollNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.enrollNumber.HeaderText = "ID";
-            this.enrollNumber.Name = "enrollNumber";
-            this.enrollNumber.ReadOnly = true;
-            // 
-            // nameColumn
-            // 
-            this.nameColumn.HeaderText = "Nombre";
-            this.nameColumn.Name = "nameColumn";
-            // 
-            // privilegeColumn
-            // 
-            this.privilegeColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.privilegeColumn.HeaderText = "Privilegio";
-            this.privilegeColumn.Name = "privilegeColumn";
-            this.privilegeColumn.ReadOnly = true;
-            // 
-            // passwordColumn
-            // 
-            this.passwordColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.passwordColumn.HeaderText = "Password";
-            this.passwordColumn.Name = "passwordColumn";
-            this.passwordColumn.ReadOnly = true;
-            // 
-            // machineNumberColumn
-            // 
-            this.machineNumberColumn.HeaderText = "Numero de Maquina";
-            this.machineNumberColumn.Name = "machineNumberColumn";
-            this.machineNumberColumn.ReadOnly = true;
-            // 
-            // foundInDBColumn
-            // 
-            this.foundInDBColumn.HeaderText = "Encontrado en la Base de datos";
-            this.foundInDBColumn.Name = "foundInDBColumn";
-            this.foundInDBColumn.ReadOnly = true;
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button1.Location = new System.Drawing.Point(311, 222);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(169, 33);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmMain
             // 
@@ -476,6 +491,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn passwordColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn machineNumberColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn foundInDBColumn;
+        private System.Windows.Forms.Button button1;
     }
 }
 

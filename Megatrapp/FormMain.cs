@@ -435,5 +435,10 @@ namespace Megatrapp
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void buttonCreateIncidences_Click(object sender, EventArgs e) {
+            DatabaseHelper helper = new DatabaseHelper();
+            helper.CreateIncidences();
+        }
     }
 }

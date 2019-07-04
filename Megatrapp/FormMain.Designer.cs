@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuMainWindow = new System.Windows.Forms.MenuStrip();
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,6 +39,7 @@
             this.buttonEraseAttendanceRecords = new System.Windows.Forms.Button();
             this.labelStatus = new System.Windows.Forms.Label();
             this.buttonRun = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.tabUsers = new System.Windows.Forms.TabPage();
             this.dataGridViewUsers = new System.Windows.Forms.DataGridView();
             this.enrollNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -60,15 +61,15 @@
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.employeeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPayroll = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.buttonCreatePayroll = new System.Windows.Forms.Button();
             this.timerApp = new System.Windows.Forms.Timer(this.components);
             this.errorProviderClocksIP = new System.Windows.Forms.ErrorProvider(this.components);
-            this.tabPayroll = new System.Windows.Forms.TabPage();
-            this.buttonCreatePayroll = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.buttonCreateIncidences = new System.Windows.Forms.Button();
             this.menuMainWindow.SuspendLayout();
             this.tabControlMainWindow.SuspendLayout();
             this.tabStatus.SuspendLayout();
@@ -83,8 +84,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClocks)).BeginInit();
             this.tabAttendanceRecords.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendanceRecords)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProviderClocksIP)).BeginInit();
             this.tabPayroll.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderClocksIP)).BeginInit();
             this.SuspendLayout();
             // 
             // menuMainWindow
@@ -144,10 +145,11 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Controls.Add(this.buttonEraseAttendanceRecords, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.labelStatus, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonRun, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonEraseAttendanceRecords, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.buttonCreateIncidences, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.buttonRun, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 5);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -193,6 +195,16 @@
             this.buttonRun.UseVisualStyleBackColor = true;
             this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
             // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(15, 48);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(234, 63);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Nota: El programa se ejecuta automaticamente a las 00:00 de cada día";
+            // 
             // tabUsers
             // 
             this.tabUsers.Controls.Add(this.dataGridViewUsers);
@@ -209,8 +221,8 @@
             // 
             this.dataGridViewUsers.AllowUserToAddRows = false;
             this.dataGridViewUsers.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.PowderBlue;
-            this.dataGridViewUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.PowderBlue;
+            this.dataGridViewUsers.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewUsers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewUsers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -406,15 +418,6 @@
             this.date.Name = "date";
             this.date.ReadOnly = true;
             // 
-            // timerApp
-            // 
-            this.timerApp.Interval = 1000;
-            this.timerApp.Tick += new System.EventHandler(this.timerApp_Tick);
-            // 
-            // errorProviderClocksIP
-            // 
-            this.errorProviderClocksIP.ContainerControl = this;
-            // 
             // tabPayroll
             // 
             this.tabPayroll.Controls.Add(this.label2);
@@ -430,15 +433,28 @@
             this.tabPayroll.Text = "Nominas";
             this.tabPayroll.UseVisualStyleBackColor = true;
             // 
-            // buttonCreatePayroll
+            // label2
             // 
-            this.buttonCreatePayroll.Location = new System.Drawing.Point(339, 115);
-            this.buttonCreatePayroll.Name = "buttonCreatePayroll";
-            this.buttonCreatePayroll.Size = new System.Drawing.Size(85, 37);
-            this.buttonCreatePayroll.TabIndex = 0;
-            this.buttonCreatePayroll.Text = "Crear";
-            this.buttonCreatePayroll.UseVisualStyleBackColor = true;
-            this.buttonCreatePayroll.Click += new System.EventHandler(this.buttonCreatePayroll_Click);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(467, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 21);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Hasta";
+            // 
+            // dateTimePickerEnd
+            // 
+            this.dateTimePickerEnd.Location = new System.Drawing.Point(389, 47);
+            this.dateTimePickerEnd.Name = "dateTimePickerEnd";
+            this.dateTimePickerEnd.Size = new System.Drawing.Size(200, 29);
+            this.dateTimePickerEnd.TabIndex = 3;
+            // 
+            // dateTimePickerStart
+            // 
+            this.dateTimePickerStart.Location = new System.Drawing.Point(164, 47);
+            this.dateTimePickerStart.Name = "dateTimePickerStart";
+            this.dateTimePickerStart.Size = new System.Drawing.Size(200, 29);
+            this.dateTimePickerStart.TabIndex = 2;
             // 
             // label1
             // 
@@ -449,38 +465,37 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Desde";
             // 
-            // dateTimePickerStart
+            // buttonCreatePayroll
             // 
-            this.dateTimePickerStart.Location = new System.Drawing.Point(164, 47);
-            this.dateTimePickerStart.Name = "dateTimePickerStart";
-            this.dateTimePickerStart.Size = new System.Drawing.Size(200, 29);
-            this.dateTimePickerStart.TabIndex = 2;
+            this.buttonCreatePayroll.Location = new System.Drawing.Point(339, 115);
+            this.buttonCreatePayroll.Name = "buttonCreatePayroll";
+            this.buttonCreatePayroll.Size = new System.Drawing.Size(85, 37);
+            this.buttonCreatePayroll.TabIndex = 0;
+            this.buttonCreatePayroll.Text = "Crear";
+            this.buttonCreatePayroll.UseVisualStyleBackColor = true;
+            this.buttonCreatePayroll.Click += new System.EventHandler(this.buttonCreatePayroll_Click);
             // 
-            // dateTimePickerEnd
+            // timerApp
             // 
-            this.dateTimePickerEnd.Location = new System.Drawing.Point(389, 47);
-            this.dateTimePickerEnd.Name = "dateTimePickerEnd";
-            this.dateTimePickerEnd.Size = new System.Drawing.Size(200, 29);
-            this.dateTimePickerEnd.TabIndex = 3;
+            this.timerApp.Interval = 1000;
+            this.timerApp.Tick += new System.EventHandler(this.timerApp_Tick);
             // 
-            // label2
+            // errorProviderClocksIP
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(467, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 21);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Hasta";
+            this.errorProviderClocksIP.ContainerControl = this;
             // 
-            // label3
+            // buttonCreateIncidences
             // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 48);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(234, 63);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Nota: El programa se ejecuta automaticamente a las 00:00 de cada día";
+            this.buttonCreateIncidences.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonCreateIncidences.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonCreateIncidences.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.buttonCreateIncidences.Location = new System.Drawing.Point(576, 222);
+            this.buttonCreateIncidences.Name = "buttonCreateIncidences";
+            this.buttonCreateIncidences.Size = new System.Drawing.Size(169, 33);
+            this.buttonCreateIncidences.TabIndex = 4;
+            this.buttonCreateIncidences.Text = "&Crear incidencias";
+            this.buttonCreateIncidences.UseVisualStyleBackColor = true;
+            this.buttonCreateIncidences.Click += new System.EventHandler(this.buttonCreateIncidences_Click);
             // 
             // frmMain
             // 
@@ -513,9 +528,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClocks)).EndInit();
             this.tabAttendanceRecords.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAttendanceRecords)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProviderClocksIP)).EndInit();
             this.tabPayroll.ResumeLayout(false);
             this.tabPayroll.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProviderClocksIP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -562,6 +577,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonCreatePayroll;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button buttonCreateIncidences;
     }
 }
 
